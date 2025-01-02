@@ -2,26 +2,38 @@
 import { Button } from '@/components/ui/button';
 import { useMutation, useQuery } from "convex/react";
 import { api } from '../../convex/_generated/api';
-import { useOrganization } from '@clerk/nextjs';
+import { useOrganization, useUser } from '@clerk/nextjs';
 
 export default function Home() {
   const createFile = useMutation(api.files.createFile); 
-  const { organization } = useOrganization();
-  const getFiles = useQuery(api.files.getFiles, organization?.id ? { orgId: organization.id } : 'skip');
-  
+  const organization = useOrganization();
+  const user = useUser();
+  let orgId: string | undefined = undefined;
+
+  // if user is logged in, get orgId from user or their organization
+  if (organization.isLoaded && user.isLoaded) {
+    orgId = organization.organization?.id ?? user.user?.id;
+  }
+
+  const getFiles = useQuery(api.files.getFiles, orgId ? {orgId} : "skip");
   
     return (
-        <div className='flex flex-col items-center'>
-            <Button onClick={() => {
-              if (!organization) return;
-              createFile({
-                name: "hello world 2",
-                orgId: organization.id,
-              })
-            }}>Create File</Button>
+        <main className='flex mx-4 justify-between mt-4'>
+          <div>
+            <h1 className='text-4xl font-bold'>Your files</h1>
             <div>
               {getFiles?.map((file) => {return <p key={file._id}>{file.name}</p>})}
             </div>
-        </div>
+          </div>
+          <div>
+            <Button  className='mx-auto' onClick={() => {
+              if (!orgId) return;
+              createFile({
+                name: "hello world 2",
+                orgId,
+              })
+            }}>Create File</Button>
+            </div>
+        </main>
     );
 }
