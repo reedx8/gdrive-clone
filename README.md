@@ -13,5 +13,6 @@ Next.js x React x TypeScript x Convex x Shadcn app
 ## Workflows
 
 -   Create endpoint in convex and call it from frontend:
-    -   create mutation function/endpoint in convex/files.ts (create files.ts)
+    -   create function/endpoint in convex/files.ts (create files.ts)
+        -   mutation() if create/delete, query() if get
     -   Import useMutation in frontend (as well as api), assign to variable, call it on some action (eg onClick, etc)
