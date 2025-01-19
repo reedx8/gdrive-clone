@@ -1,4 +1,4 @@
-// Backend code for app
+// Backend code for app -- a convex "mutation" is an endpoint/function that can be called from the frontend
 import { ConvexError, v } from 'convex/values';
 import { mutation, MutationCtx, query, QueryCtx } from './_generated/server';
 import { getUser } from './users';
@@ -84,5 +84,37 @@ export const getFiles = query({
             .query('files')
             .withIndex('by_orgId', (q) => q.eq('orgId', args.orgId))
             .collect();
+    },
+});
+
+export const deleteFile = mutation({
+    args: {
+        fileId: v.id('files'),
+        // orgId: v.string(),
+    },
+    async handler(ctx, args) {
+        const identity = await ctx.auth.getUserIdentity();
+
+        if (!identity) {
+            throw new ConvexError('Log in to delete files');
+        }
+
+        const file = await ctx.db.get(args.fileId);
+
+        if (!file) {
+            throw new ConvexError('File not found');
+        }
+
+        const hasAccess = await hasAccessToOrg(
+            ctx,
+            identity.tokenIdentifier,
+            file.orgId // want the orgId of the file, not the user
+        );
+
+        if (!hasAccess) {
+            throw new ConvexError("You don't have access to this org");
+        }
+
+        await ctx.db.delete(args.fileId);
     },
 });

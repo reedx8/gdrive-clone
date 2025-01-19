@@ -19,7 +19,7 @@ import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { set, useForm } from 'react-hook-form';
+import { useForm } from 'react-hook-form';
 import { useMutation } from 'convex/react';
 import { api } from '../../convex/_generated/api';
 import { useState } from 'react';
@@ -75,7 +75,7 @@ export default function CreateFileModal(orgId: string | undefined) {
                 title: 'File Uploaded',
                 description: 'Your file has been uploaded successfully',
             });
-        } catch (error) {
+        } catch {
             toast({
                 variant: 'destructive',
                 title: 'Error',

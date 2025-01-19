@@ -1,9 +1,10 @@
 'use client';
-import { ReactMutation, useMutation, useQuery } from 'convex/react';
+import { useQuery } from 'convex/react';
 import { api } from '../../convex/_generated/api';
 import { useOrganization, useUser } from '@clerk/nextjs';
-import { FunctionReference } from 'convex/server';
+// import { FunctionReference } from 'convex/server';
 import CreateFileModal from '@/components/createFileModal';
+import { FileCard } from '@/components/fileCard';
 
 
 export default function Home() {
@@ -22,27 +23,17 @@ export default function Home() {
     return (
         <main className='flex mx-4 justify-between mt-4'>
             <div>
-                <h1 className='text-4xl font-bold'>Your files</h1>
-                <div>
+                <h1 className='text-4xl font-bold'>Your Files</h1>
+                <div className='grid grid-cols-1 gap-4 md:grid-cols-3 lg:grid-cols-4 mt-4'>
                     {getFiles?.map((file) => {
-                        return <p key={file._id}>{file.name}</p>;
+                        return (
+                            <FileCard file={file} key={file._id} />
+                        )
                     })}
                 </div>
             </div>
             <div>
               {CreateFileModal(orgId)}
-                {/* <Button
-                    className='mx-auto'
-                    onClick={() => {
-                        if (!orgId) return;
-                        createFile({
-                            name: 'hello world 2',
-                            orgId,
-                        });
-                    }}
-                >
-                    Create File
-                </Button> */}
             </div>
         </main>
     );
