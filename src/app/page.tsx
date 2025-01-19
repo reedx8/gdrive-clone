@@ -3,10 +3,11 @@ import { ReactMutation, useMutation, useQuery } from 'convex/react';
 import { api } from '../../convex/_generated/api';
 import { useOrganization, useUser } from '@clerk/nextjs';
 import { FunctionReference } from 'convex/server';
-import CreateFileBtn from '@/components/createFileModal';
+import CreateFileModal from '@/components/createFileModal';
+
 
 export default function Home() {
-    const createFile = useMutation(api.files.createFile);
+    // const createFile = useMutation(api.files.createFile);
     const organization = useOrganization();
     const user = useUser();
     let orgId: string | undefined = undefined;
@@ -29,7 +30,7 @@ export default function Home() {
                 </div>
             </div>
             <div>
-              {CreateFileBtn(createFile, orgId)}
+              {CreateFileModal(orgId)}
                 {/* <Button
                     className='mx-auto'
                     onClick={() => {
