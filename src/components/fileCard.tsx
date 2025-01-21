@@ -16,10 +16,12 @@ import {
 import { Button } from '@/components/ui/button';
 import { useMutation } from 'convex/react';
 import { api } from '../../convex/_generated/api';
+import { useToast } from '@/hooks/use-toast';
 // import { deleteFile } from '../../convex/files';
 
 function FileCardActions({ file }: { file: Doc<'files'> }) {
     const deleteFile = useMutation(api.files.deleteFile);
+    const { toast } = useToast();
 
     // async function onDelete() {
     //     await deletFile({ fileId: file._id });
@@ -32,7 +34,14 @@ function FileCardActions({ file }: { file: Doc<'files'> }) {
             <DropdownMenuContent>
                 <DropdownMenuItem
                     className='flex gap-1 text-red-600 items-center cursor-pointer'
-                    onClick={() => deleteFile({ fileId: file._id })}
+                    onClick={async () => {
+                        deleteFile({ fileId: file._id });
+                        toast({
+                            variant: 'default',
+                            title: 'File deleted',
+                            description: 'File deleted successfully',
+                        })
+                    }}
                 >
                     <TrashIcon className='h-4 w-4' />
                     Delete

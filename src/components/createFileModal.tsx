@@ -91,7 +91,7 @@ export default function CreateFileModal(orgId: string | undefined) {
         }}
         >
             <DialogTrigger asChild>
-                <Button variant='outline'>Upload File</Button>
+                <Button variant='default'>Upload File</Button>
             </DialogTrigger>
             <DialogContent>
                 <DialogHeader>
