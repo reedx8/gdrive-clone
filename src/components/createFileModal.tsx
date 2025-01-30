@@ -37,7 +37,15 @@ const formSchema = z.object({
     // file: z.custom<File | null>((val) => val instanceof File, 'Required'),
 });
 
-export default function CreateFileModal(orgId: string | undefined) {
+// type Props =  {
+//     orgId: string | undefined
+// };
+
+export default function CreateFileModal({
+    orgId,
+}: {
+    orgId: string | undefined;
+}) {
     const createFile = useMutation(api.files.createFile);
     const generateUploadUrl = useMutation(api.files.generateUploadUrl);
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -85,10 +93,12 @@ export default function CreateFileModal(orgId: string | undefined) {
     }
 
     return (
-        <Dialog open={isModalOpen} onOpenChange={(isOpen) => {
-            setIsModalOpen(isOpen);
-            form.reset();
-        }}
+        <Dialog
+            open={isModalOpen}
+            onOpenChange={(isOpen) => {
+                setIsModalOpen(isOpen);
+                form.reset();
+            }}
         >
             <DialogTrigger asChild>
                 <Button variant='default'>Upload File</Button>
@@ -138,8 +148,14 @@ export default function CreateFileModal(orgId: string | undefined) {
                             )}
                         />
                         {/* To get spinning loader in shadcn button while submitting, add disabled={form.formState.isSubmitting} */}
-                        <Button type='submit' className='flex gap-1' disabled={form.formState.isSubmitting}>
-                            {form.formState.isSubmitting && (<Loader2 className='animate-spin h-5 w-5 text-white' />)}
+                        <Button
+                            type='submit'
+                            className='flex gap-1'
+                            disabled={form.formState.isSubmitting}
+                        >
+                            {form.formState.isSubmitting && (
+                                <Loader2 className='animate-spin h-5 w-5 text-white' />
+                            )}
                             Submit
                         </Button>
                     </form>
