@@ -25,6 +25,7 @@ import { api } from '../../convex/_generated/api';
 import { useState } from 'react';
 import { useToast } from '@/hooks/use-toast';
 import { Loader2 } from 'lucide-react';
+import { Doc } from '../../convex/_generated/dataModel';
 // import createFile from '../../convex/files';
 
 // Schema of the form
@@ -61,20 +62,32 @@ export default function CreateFileModal({
     const fileRef = form.register('file');
 
     async function onSubmit(values: z.infer<typeof formSchema>) {
-        console.log(values);
-        console.log(values.file);
+        // console.log(values);
+        // console.log(values.file);
         if (!orgId) return;
 
         const postUrl = await generateUploadUrl(); // Calls backend, and gives us a url to upload to
+        const fileType = values.file[0].type;
         const result = await fetch(postUrl, {
             method: 'POST',
-            headers: { 'Content-Type': values.file[0].type },
+            headers: { 'Content-Type': fileType },
             body: values.file[0],
         });
         const { storageId } = await result.json();
 
+        const types = {
+            "image/png": "image",
+            "text/csv": "csv",
+            "application/pdf": "pdf"
+        } as Record<string, Doc<"files">["type"]>;
+
         try {
-            await createFile({ name: values.title, fileId: storageId, orgId });
+            await createFile({
+                name: values.title,
+                fileId: storageId,
+                orgId,
+                type: types[fileType],
+            });
             form.reset();
             setIsModalOpen(false);
 

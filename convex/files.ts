@@ -2,6 +2,7 @@
 import { ConvexError, v } from 'convex/values';
 import { mutation, MutationCtx, query, QueryCtx } from './_generated/server';
 import { getUser } from './users';
+import { fileTypes } from './schema';
 
 // Upload file to convex storage
 export const generateUploadUrl = mutation(async (ctx) => {
@@ -28,6 +29,7 @@ export const createFile = mutation({
         name: v.string(),
         fileId: v.id('_storage'), // convex built in type for file storage
         orgId: v.string(),
+        type: fileTypes,
     },
     async handler(ctx, args) {
         // authenticating on the backend, and ensuring user has access to org
@@ -54,6 +56,7 @@ export const createFile = mutation({
             name: args.name,
             orgId: args.orgId,
             fileId: args.fileId,
+            type: args.type,
         });
     },
 });
@@ -118,3 +121,14 @@ export const deleteFile = mutation({
         await ctx.db.delete(args.fileId);
     },
 });
+
+// export const getFileUrl = query({
+//     args: {
+//         fileId: v.id('_storage'),
+//     },
+//     async handler(ctx, args) {
+//         // return `https://quick-capybara-655.convex.cloud/api/storage/${args.fileId}`
+//         if args.fileId.type
+//         return await ctx.storage.getUrl(args.fileId);
+//     },
+// });
