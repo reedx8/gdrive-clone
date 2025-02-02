@@ -9,10 +9,10 @@ import {
     FormItem,
     // FormLabel,
     FormMessage,
-} from './ui/form';
-import { Input } from './ui/input';
+} from '@/components/ui/form';
+import { Input } from '@/components/ui/input';
 import { Loader2, SearchIcon } from 'lucide-react';
-import { Button } from './ui/button';
+import { Button } from '@/components/ui/button';
 
 const querySchema = z.object({
     query: z.string().min(0).max(200),
@@ -36,7 +36,7 @@ export default function SearchBar({query, setQuery}: {query: string, setQuery: R
             <Form {...form}>
                 <form
                     onSubmit={form.handleSubmit(onSubmit)}
-                    className='space-y-2'
+                    className='flex items-center gap-2'
                 >
                     <FormField
                         control={form.control}

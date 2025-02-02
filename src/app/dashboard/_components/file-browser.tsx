@@ -1,23 +1,17 @@
 'use client';
-import { useQuery } from 'convex/react';
-import { api } from '../../convex/_generated/api';
-import { useOrganization, useUser } from '@clerk/nextjs';
-// import { FunctionReference } from 'convex/server';
-import CreateFileModal from '@/components/createFileModal';
-import { FileCard } from '@/components/fileCard';
-import imageFolder from '../../public/imagefolder.svg';
+import CreateFileModal from './createFileModal';
+import SearchBar from '@/app/dashboard/_components/searchBar';
+import { FileCard } from '@/app/dashboard/_components/fileCard';
+import imageFolder from '/public/imagefolder.svg';
 import zeroSearchResults from '/public/searchEngines.svg';
-import Image from 'next/image';
 import { Loader2 } from 'lucide-react';
-import SearchBar from '@/components/searchBar';
+import Image from 'next/image';
+import { useOrganization, useUser } from '@clerk/nextjs';
+import { useQuery } from 'convex/react';
+import { api } from '../../../../convex/_generated/api';
 import { useState } from 'react';
-import { get } from 'http';
-import Sidebar from '@/components/sidebar';
-{
-    /* <Loader2 className='animate-spin h-5 w-5 text-white' /> */
-}
 
-export default function Home() {
+export default function FileBrowser({ title }: { title: string }) {
     const [query, setQuery] = useState('');
     let orgId: string | undefined = undefined;
     // let orgId: string | undefined;
@@ -38,19 +32,19 @@ export default function Home() {
     // console.log(getFiles);
 
     return (
-        <main className='flex mx-4 mt-6'>
-            <Sidebar />
-            <div className='w-full'>
+        <main className='w-full'>
+            <div>
                 {getFiles && (
                     <div className='flex flex-col justify-between'>
                         <div className='flex justify-between mb-2'>
-                            <h1 className='text-4xl font-bold'>Your Files</h1>
+                            <h1 className='text-4xl font-bold'>{title}</h1>
                             {/* <div>{CreateFileModal(orgId)}</div> */}
+                            <SearchBar query={query} setQuery={setQuery} />
                             <div>
                                 <CreateFileModal orgId={orgId} />
                             </div>
                         </div>
-                        <SearchBar query={query} setQuery={setQuery} />
+                        {/* <SearchBar query={query} setQuery={setQuery} /> */}
                         {query &&
                             getFiles?.length === 0 &&
                             noFilesFound(orgId, 'search')}

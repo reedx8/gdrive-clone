@@ -21,11 +21,13 @@ import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { useMutation } from 'convex/react';
-import { api } from '../../convex/_generated/api';
+// import { api } from '../../convex/_generated/api';
+import { api } from '../../../../convex/_generated/api';
 import { useState } from 'react';
 import { useToast } from '@/hooks/use-toast';
 import { Loader2 } from 'lucide-react';
-import { Doc } from '../../convex/_generated/dataModel';
+import { Doc } from '../../../../convex/_generated/dataModel';
+// import { Doc } from '../../convex/_generated/dataModel';
 // import createFile from '../../convex/files';
 
 // Schema of the form
