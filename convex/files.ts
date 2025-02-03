@@ -67,6 +67,7 @@ export const getFiles = query({
     args: {
         orgId: v.string(),
         query: v.optional(v.string()),
+        favorites: v.optional(v.boolean()),
     },
     async handler(ctx, args) {
         const identity = await ctx.auth.getUserIdentity();
@@ -85,7 +86,7 @@ export const getFiles = query({
             return [];
         }
 
-        const files = await ctx.db
+        let files = await ctx.db
             .query('files')
             .withIndex('by_orgId', (q) => q.eq('orgId', args.orgId))
             .collect();
@@ -93,15 +94,36 @@ export const getFiles = query({
         const query = args.query;
 
         if (query) {
-            return files.filter(
+            files = files.filter(
                 // (file) => file.name.includes(query)
                 (file) =>
                     file.name.toLowerCase().includes(query.toLowerCase()) ||
                     file.type.toLowerCase().includes(query.toLowerCase())
             );
-        } else {
-            return files;
         }
+
+        if (args.favorites) {
+            const user = await ctx.db
+                .query('users')
+                .withIndex('by_tokenIdentifier', (q) =>
+                    q.eq('tokenIdentifier', identity.tokenIdentifier)
+                )
+                .first();
+            if (!user) {
+                return files;
+            }
+            const favorites = await ctx.db
+                .query('favorites')
+                .withIndex('by_userId__orgId_fileid', (q) =>
+                    q.eq('userId', user._id).eq('orgId', args.orgId)
+                )
+                .collect();
+
+            files = files.filter((file) =>
+                favorites.some((favorite) => favorite.fileId === file._id)
+            );
+        }
+        return files;
     },
 });
 

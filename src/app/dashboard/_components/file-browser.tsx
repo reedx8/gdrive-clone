@@ -11,7 +11,7 @@ import { useQuery } from 'convex/react';
 import { api } from '../../../../convex/_generated/api';
 import { useState } from 'react';
 
-export default function FileBrowser({ title }: { title: string }) {
+export default function FileBrowser({ title, favorites }: { title: string, favorites?: boolean }) {
     const [query, setQuery] = useState('');
     let orgId: string | undefined = undefined;
     // let orgId: string | undefined;
@@ -25,7 +25,7 @@ export default function FileBrowser({ title }: { title: string }) {
     }
     const getFiles = useQuery(
         api.files.getFiles,
-        orgId ? { orgId, query } : 'skip'
+        orgId ? { orgId, query, favorites } : 'skip'
     );
     // const isLoading = getFiles === undefined;
     // console.log(query);
@@ -65,6 +65,7 @@ export default function FileBrowser({ title }: { title: string }) {
                 {getFiles &&
                     !query &&
                     getFiles?.length === 0 &&
+                    !favorites &&
                     noFilesFound(orgId)}
             </div>
         </main>
@@ -73,7 +74,7 @@ export default function FileBrowser({ title }: { title: string }) {
 
 function noFilesFound(
     orgId: string | undefined,
-    placeholderType: string = 'no files'
+    placeholderType: string = 'no files',
 ) {
     const imagePlaceholder =
         placeholderType === 'search' ? zeroSearchResults : imageFolder;
