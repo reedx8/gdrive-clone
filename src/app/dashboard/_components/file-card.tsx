@@ -13,6 +13,7 @@ import {
     MoreVertical,
     StarIcon,
     TrashIcon,
+    UndoIcon,
 } from 'lucide-react';
 import {
     DropdownMenu,
@@ -26,11 +27,13 @@ import { api } from '../../../../convex/_generated/api';
 import { useToast } from '@/hooks/use-toast';
 import { ReactNode } from 'react';
 import { DropdownMenuSeparator } from '@radix-ui/react-dropdown-menu';
+// import { restoreFile } from '../../../../convex/files';
 // import Image from 'next/image';
 // import { deleteFile } from '../../convex/files';
 
 function FileCardActions({ file }: { file: Doc<'files'> }) {
     const deleteFile = useMutation(api.files.deleteFile);
+    const restoreFile = useMutation(api.files.restoreFile);
     const toggleFavorite = useMutation(api.files.toggleFavorite);
     const { toast } = useToast();
 
@@ -46,7 +49,9 @@ function FileCardActions({ file }: { file: Doc<'files'> }) {
                 <DropdownMenuItem
                     className='flex gap-1 items-center cursor-pointer'
                     onClick={async () => {
-                        const isFavorite = await toggleFavorite({ fileId: file._id });
+                        const isFavorite = await toggleFavorite({
+                            fileId: file._id,
+                        });
                         if (isFavorite) {
                             toast({
                                 variant: 'default',
@@ -67,18 +72,36 @@ function FileCardActions({ file }: { file: Doc<'files'> }) {
                 </DropdownMenuItem>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem
-                    className='flex gap-1 text-red-600 items-center cursor-pointer'
+                    className='flex gap-1 items-center cursor-pointer'
                     onClick={async () => {
-                        deleteFile({ fileId: file._id });
-                        toast({
-                            variant: 'default',
-                            title: 'File deleted',
-                            description: 'File deleted successfully',
-                        });
+                        if (file.markedForDeletion) {
+                            restoreFile({ fileId: file._id });
+                            toast({
+                                variant: 'default',
+                                title: 'File Restored',
+                                description: 'Your file has been restored',
+                            });
+                        } else {
+                            deleteFile({ fileId: file._id });
+                            toast({
+                                variant: 'default',
+                                title: 'File Deleted',
+                                description: 'Your file has been moved to trash',
+                            });
+                        }
                     }}
                 >
-                    <TrashIcon className='h-4 w-4' />
-                    Delete
+                    {file.markedForDeletion ? (
+                        <div className='flex gap-1 items-center cursor-pointer text-green-500'>
+                            <UndoIcon className='h-4 w-4' /> Restore{' '}
+                        </div>
+                    ) : (
+                        <div className='flex gap-1 items-center cursor-pointer text-red-500'>
+                            <TrashIcon className='h-4 w-4' /> Delete
+                        </div>
+                    )}
+                    {/* <TrashIcon className='h-4 w-4' /> */}
+                    {/* Delete */}
                 </DropdownMenuItem>
             </DropdownMenuContent>
         </DropdownMenu>

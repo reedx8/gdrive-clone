@@ -1,9 +1,9 @@
 import FileBrowser from "../_components/file-browser";
 
-export default function FavoritesPage() {
+export default function TrashPage() {
     return (
         <main className='w-full'>
-            <FileBrowser title='Your Favorites' favorites />
+            <FileBrowser title='Trash' trash />
         </main>
     );
 }

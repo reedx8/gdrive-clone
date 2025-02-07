@@ -120,9 +120,9 @@ export default function CreateFileModal({
             </DialogTrigger>
             <DialogContent>
                 <DialogHeader>
-                    <DialogTitle>Upload your file</DialogTitle>
-                    <DialogDescription>
-                        Upload your file here to your organization.
+                    <DialogTitle>File Upload</DialogTitle>
+                    <DialogDescription className='text-neutral-400'>
+                        Upload your file here to your organization
                     </DialogDescription>
                 </DialogHeader>
                 <Form {...form}>
@@ -142,9 +142,9 @@ export default function CreateFileModal({
                                             {...field}
                                         />
                                     </FormControl>
-                                    <FormDescription>
+                                    {/* <FormDescription>
                                         This is the title of your file.
-                                    </FormDescription>
+                                    </FormDescription> */}
                                     <FormMessage />
                                 </FormItem>
                             )}
@@ -154,7 +154,7 @@ export default function CreateFileModal({
                             name='file'
                             render={() => (
                                 <FormItem>
-                                    <FormLabel>File</FormLabel>
+                                    <FormLabel>File <span className='text-neutral-400'>(PNG, PDF, or CSV only)</span></FormLabel>
                                     <FormControl>
                                         <Input type='file' {...fileRef} />
                                     </FormControl>

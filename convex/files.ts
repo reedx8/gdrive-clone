@@ -68,8 +68,10 @@ export const getFiles = query({
         orgId: v.string(),
         query: v.optional(v.string()),
         favorites: v.optional(v.boolean()),
+        trash: v.optional(v.boolean()),
     },
     async handler(ctx, args) {
+        // Authenticating on the backend, and ensuring user has access to org
         const identity = await ctx.auth.getUserIdentity();
 
         if (!identity) {
@@ -86,13 +88,14 @@ export const getFiles = query({
             return [];
         }
 
+        // Get all files from the database
         let files = await ctx.db
             .query('files')
             .withIndex('by_orgId', (q) => q.eq('orgId', args.orgId))
             .collect();
 
+        // If searching files:
         const query = args.query;
-
         if (query) {
             files = files.filter(
                 // (file) => file.name.includes(query)
@@ -102,6 +105,7 @@ export const getFiles = query({
             );
         }
 
+        // If filtering for favorited files
         if (args.favorites) {
             const user = await ctx.db
                 .query('users')
@@ -123,10 +127,30 @@ export const getFiles = query({
                 favorites.some((favorite) => favorite.fileId === file._id)
             );
         }
+
+        // If filtering for files in trash
+        if (args.trash) {
+            const user = await ctx.db
+                .query('users')
+                .withIndex('by_tokenIdentifier', (q) =>
+                    q.eq('tokenIdentifier', identity.tokenIdentifier)
+                )
+                .first();
+            if (!user) {
+                return files;
+            }
+
+            files = files.filter((file) => file.markedForDeletion);
+        } else {
+            // Else, filter for files that are not marked for deletion and return them below
+            files = files.filter((file) => !file.markedForDeletion);
+        }
+
         return files;
     },
 });
 
+// Mark file for deletion
 export const deleteFile = mutation({
     args: {
         fileId: v.id('files'),
@@ -139,10 +163,30 @@ export const deleteFile = mutation({
         }
         // const { file } = access;
 
-        await ctx.db.delete(args.fileId);
+        await ctx.db.patch(args.fileId, { markedForDeletion: true });
+        // await ctx.db.delete(args.fileId);
     },
 });
 
+// Unmark file for deletion
+export const restoreFile = mutation({
+    args: {
+        fileId: v.id('files'),
+        // orgId: v.string(),
+    },
+    async handler(ctx, args) {
+        const access = await hasAccessToFile(ctx, args.fileId);
+        if (!access) {
+            throw new ConvexError("You don't have access to this file");
+        }
+        // const { file } = access;
+
+        await ctx.db.patch(args.fileId, { markedForDeletion: false });
+        // await ctx.db.delete(args.fileId);
+    },
+});
+
+// Toggle favorite/unfavorite file
 export const toggleFavorite = mutation({
     args: {
         fileId: v.id('files'),
@@ -177,6 +221,7 @@ export const toggleFavorite = mutation({
     },
 });
 
+// Utility function to check if user has access to file
 async function hasAccessToFile(
     ctx: QueryCtx | MutationCtx,
     fileId: Id<'files'>

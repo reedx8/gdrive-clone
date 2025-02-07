@@ -1,7 +1,7 @@
 'use client';
 import CreateFileModal from './createFileModal';
-import SearchBar from '@/app/dashboard/_components/searchBar';
-import { FileCard } from '@/app/dashboard/_components/fileCard';
+import SearchBar from '@/app/dashboard/_components/search-bar';
+import { FileCard } from '@/app/dashboard/_components/file-card';
 import imageFolder from '/public/imagefolder.svg';
 import zeroSearchResults from '/public/searchEngines.svg';
 import { Loader2 } from 'lucide-react';
@@ -11,7 +11,7 @@ import { useQuery } from 'convex/react';
 import { api } from '../../../../convex/_generated/api';
 import { useState } from 'react';
 
-export default function FileBrowser({ title, favorites }: { title: string, favorites?: boolean }) {
+export default function FileBrowser({ title, favorites, trash }: { title: string, favorites?: boolean, trash?: boolean }) {
     const [query, setQuery] = useState('');
     let orgId: string | undefined = undefined;
     // let orgId: string | undefined;
@@ -23,9 +23,11 @@ export default function FileBrowser({ title, favorites }: { title: string, favor
     if (organization.isLoaded && user.isLoaded) {
         orgId = organization.organization?.id ?? user.user?.id;
     }
+
+    // Fetch files from the convex api depending on type of file requested (all files, favorite files, or files in trash)
     const getFiles = useQuery(
         api.files.getFiles,
-        orgId ? { orgId, query, favorites } : 'skip'
+        orgId ? { orgId, query, favorites, trash } : 'skip'
     );
     // const isLoading = getFiles === undefined;
     // console.log(query);
