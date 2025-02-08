@@ -1,6 +1,6 @@
-# File Storage App
+# Google Drive Clone App
 
-Next.js x React x TypeScript x Convex x Shadcn app
+A Next.js x React x TypeScript x Convex DB x Clerk Auth x Shadcn file storage appplication
 
 ## Getting started
 
