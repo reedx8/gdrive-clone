@@ -1,6 +1,6 @@
 // Backend code for app -- a convex "mutation" is an endpoint/function that can be called from the frontend
 import { ConvexError, v } from 'convex/values';
-import { mutation, MutationCtx, query, QueryCtx } from './_generated/server';
+import { internalMutation, mutation, MutationCtx, query, QueryCtx } from './_generated/server';
 import { getUser } from './users';
 import { fileTypes } from './schema';
 import { Id } from './_generated/dataModel';
@@ -149,6 +149,20 @@ export const getFiles = query({
         return files;
     },
 });
+
+// Delete all files marked for deletion in a cron job (see convex/crons.ts)
+export const deleteAllFiles = internalMutation({
+    async handler(ctx) {
+        const files = await ctx.db.query('files')
+            .withIndex('by_markedForDeletion', (q) => q.eq('markedForDeletion', true))
+            .collect();
+        
+        await Promise.all(files.map(async (file) => {
+            await ctx.storage.delete(file.fileId);
+            return await ctx.db.delete(file._id);
+        }));
+    },
+})
 
 // Mark file for deletion
 export const deleteFile = mutation({
