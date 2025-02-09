@@ -22,11 +22,14 @@ import {
     DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { Button } from '@/components/ui/button';
-import { useMutation } from 'convex/react';
+import { useMutation, useQuery } from 'convex/react';
 import { api } from '../../../../convex/_generated/api';
 import { useToast } from '@/hooks/use-toast';
 import { ReactNode } from 'react';
 import { DropdownMenuSeparator } from '@radix-ui/react-dropdown-menu';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { format, formatDistance, formatRelative, subDays } from 'date-fns';
+
 // import { restoreFile } from '../../../../convex/files';
 // import Image from 'next/image';
 // import { deleteFile } from '../../convex/files';
@@ -86,7 +89,8 @@ function FileCardActions({ file }: { file: Doc<'files'> }) {
                             toast({
                                 variant: 'default',
                                 title: 'File Deleted',
-                                description: 'Your file has been moved to trash',
+                                description:
+                                    'Your file has been moved to trash',
                             });
                         }
                     }}
@@ -121,6 +125,9 @@ export function FileCard({ file }: { file: Doc<'files'> }) {
         pdf: <FileTextIcon />,
         csv: <GanttChartIcon />,
     } as Record<Doc<'files'>['type'], ReactNode>;
+    const userProfile = useQuery(api.users.getUserProfile, {
+        userId: file.userId,
+    });
 
     // const getFileUrl = useQuery(api.files.getFileUrl, { fileId: file.fileId });
     // const fileUrl = useQuery(api.files.getFileUrl, { fileId: file.fileId });
@@ -128,7 +135,7 @@ export function FileCard({ file }: { file: Doc<'files'> }) {
     return (
         <Card>
             <CardHeader className='relative'>
-                <CardTitle className='mr-2 flex items-center gap-2 text-lg'>
+                <CardTitle className='mr-2 flex items-center gap-2 text-base font-normal'>
                     <p>{typeIcons[file.type]}</p>
                     {file.name}
                     {/* <FileCardActions /> */}
@@ -136,20 +143,35 @@ export function FileCard({ file }: { file: Doc<'files'> }) {
                 <div className='absolute right-2 top-2'>
                     <FileCardActions file={file} />
                 </div>
+                <p className='text-xs text-neutral-500'>
+                    Uploaded On:{' '}
+                    {formatRelative(new Date(file._creationTime), new Date())}
+                </p>
             </CardHeader>
-            <CardContent className='h-[200px] flex items-center justify-center'>
+            <CardContent className='h-[150px] flex items-center justify-center'>
                 {/* {file.type === 'image' && (
                     // <Image src={getFileUrl(file.fileId)} alt={file.name} width={100} height={100} />
                     <Image src={fileUrl} alt={file.name} width={100} height={100} />
                 )} */}
                 {file.type === 'csv' && (
-                    <GanttChartIcon className='w-20 h-20' />
+                    <GanttChartIcon className='w-16 h-16' />
                 )}
-                {file.type === 'pdf' && <FileTextIcon className='w-20 h-20' />}
-                {file.type === 'image' && <ImageIcon className='w-20 h-20' />}
+                {file.type === 'pdf' && <FileTextIcon className='w-16 h-16' />}
+                {file.type === 'image' && <ImageIcon className='w-16 h-16' />}
             </CardContent>
             <CardFooter className='flex justify-center'>
-                <Button>Download</Button>
+                {/* {userProfile?.name} */}
+                {/* {userProfile?.image} */}
+                <div className='flex flex-col items-center'>
+                    <div className='flex items-center gap-2 mb-2 text-sm'>
+                        <Avatar className='w-8 h-8'>
+                            <AvatarImage src={userProfile?.image} />
+                            <AvatarFallback></AvatarFallback>
+                        </Avatar>
+                        {userProfile?.name}
+                    </div>
+                    <Button size='sm'>Download</Button>
+                </div>
                 {/* <Button onClick={() => {window.open(getFileUrl(file.fileId, "_blank"))}}>Download</Button> */}
             </CardFooter>
         </Card>

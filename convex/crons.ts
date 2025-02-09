@@ -1,5 +1,7 @@
-import {cronJobs} from 'convex/server';
-import {internal} from './_generated/api';
+import { cronJobs } from 'convex/server';
+import { internal } from './_generated/api';
+
+// https://docs.convex.dev/scheduling/cron-jobs
 
 const crons = cronJobs();
 
