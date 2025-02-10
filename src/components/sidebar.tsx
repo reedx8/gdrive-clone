@@ -14,7 +14,7 @@ export default function Sidebar() {
     }, [pathname]);
 
     return (
-        <div className='w-32 flex flex-col gap-4'>
+        <div className='w-36 flex flex-col gap-4'>
             <Link href='/dashboard/files' className='flex gap-2'>
                 <Button
                     variant={'link'}

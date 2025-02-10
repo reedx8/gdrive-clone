@@ -48,49 +48,51 @@ export default function FileBrowser({
     return (
         <main className='w-full'>
             <div>
-                {getFiles && (
-                    <div className='flex flex-col justify-between'>
-                        <div className='flex justify-between mb-2'>
-                            <h1 className='text-4xl font-bold'>{title}</h1>
-                            {/* <div>{CreateFileModal(orgId)}</div> */}
-                            <SearchBar query={query} setQuery={setQuery} />
-                            <div>
-                                <CreateFileModal orgId={orgId} />
-                            </div>
+                <div className='flex flex-col justify-between'>
+                    <div className='flex justify-between mb-2'>
+                        <h1 className='text-4xl font-bold'>{title}</h1>
+                        {/* <div>{CreateFileModal(orgId)}</div> */}
+                        <SearchBar query={query} setQuery={setQuery} />
+                        <div>
+                            <CreateFileModal orgId={orgId} />
                         </div>
-                        <Tabs defaultValue='grid'>
-                            <TabsList className='mb-2'>
-                                <TabsTrigger value='grid'><LayoutGrid size={16} /></TabsTrigger>
-                                <TabsTrigger value='table'><List size={16} /></TabsTrigger>
-                            </TabsList>
-                            <TabsContent value='grid'>
-                                <div className='grid grid-cols-1 gap-4 md:grid-cols-3 lg:grid-cols-4'>
-                                    {getFiles?.map((file) => {
-                                        return (
-                                            <FileCard
-                                                file={file}
-                                                key={file._id}
-                                            />
-                                        );
-                                    })}
-                                </div>
-                            </TabsContent>
-                            <TabsContent value='table'>
+                    </div>
+                    <Tabs defaultValue='grid'>
+                        <TabsList className='mb-2'>
+                            <TabsTrigger value='grid'>
+                                <LayoutGrid size={16} />
+                            </TabsTrigger>
+                            <TabsTrigger value='table'>
+                                <List size={16} />
+                            </TabsTrigger>
+                        </TabsList>
+                        <TabsContent value='grid'>
+                            <div className='grid grid-cols-1 gap-4 md:grid-cols-3 lg:grid-cols-4'>
+                                {getFiles?.map((file) => {
+                                    return (
+                                        <FileCard file={file} key={file._id} />
+                                    );
+                                })}
+                            </div>
+                        </TabsContent>
+                        <TabsContent value='table'>
+                            {getFiles && (
                                 <FileTable columns={columns} files={getFiles} />
-                            </TabsContent>
-                        </Tabs>
-                        {query &&
-                            getFiles?.length === 0 &&
-                            noFilesFound(orgId, 'search')}
-                    </div>
-                )}
-                {getFiles === undefined && (
-                    <div className='flex flex-col items-center'>
-                        {/* <div className='flex items-center'> */}
-                        <Loader2 className='animate-spin h-32 w-32 text-black' />
-                        {/* </div> */}
-                    </div>
-                )}
+                            )}
+                        </TabsContent>
+                    </Tabs>
+                    {query &&
+                        getFiles?.length === 0 &&
+                        noFilesFound(orgId, 'search')}
+                    {/* </div> */}
+                    {getFiles === undefined && (
+                        <div className='flex flex-col items-center'>
+                            {/* <div className='flex items-center'> */}
+                            <Loader2 className='animate-spin h-32 w-32 text-black' />
+                            {/* </div> */}
+                        </div>
+                    )}
+                </div>
                 {getFiles &&
                     !query &&
                     getFiles?.length === 0 &&
