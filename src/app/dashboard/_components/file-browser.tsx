@@ -4,15 +4,27 @@ import SearchBar from '@/app/dashboard/_components/search-bar';
 import { FileCard } from '@/app/dashboard/_components/file-card';
 import imageFolder from '/public/imagefolder.svg';
 import zeroSearchResults from '/public/searchEngines.svg';
-import { Loader2 } from 'lucide-react';
+import { LayoutGrid, List, Loader2 } from 'lucide-react';
 import Image from 'next/image';
 import { useOrganization, useUser } from '@clerk/nextjs';
 import { useQuery } from 'convex/react';
 import { api } from '../../../../convex/_generated/api';
 import { useState } from 'react';
+import FileTable from './file-table';
+import { columns } from './columns';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 
-export default function FileBrowser({ title, favorites, trash }: { title: string, favorites?: boolean, trash?: boolean }) {
+export default function FileBrowser({
+    title,
+    favorites,
+    trash,
+}: {
+    title: string;
+    favorites?: boolean;
+    trash?: boolean;
+}) {
     const [query, setQuery] = useState('');
+    // const [view, setView] = useState('cards');
     let orgId: string | undefined = undefined;
     // let orgId: string | undefined;
     // const createFile = useMutation(api.files.createFile);
@@ -46,15 +58,30 @@ export default function FileBrowser({ title, favorites, trash }: { title: string
                                 <CreateFileModal orgId={orgId} />
                             </div>
                         </div>
-                        {/* <SearchBar query={query} setQuery={setQuery} /> */}
+                        <Tabs defaultValue='grid'>
+                            <TabsList className='mb-2'>
+                                <TabsTrigger value='grid'><LayoutGrid size={16} /></TabsTrigger>
+                                <TabsTrigger value='table'><List size={16} /></TabsTrigger>
+                            </TabsList>
+                            <TabsContent value='grid'>
+                                <div className='grid grid-cols-1 gap-4 md:grid-cols-3 lg:grid-cols-4'>
+                                    {getFiles?.map((file) => {
+                                        return (
+                                            <FileCard
+                                                file={file}
+                                                key={file._id}
+                                            />
+                                        );
+                                    })}
+                                </div>
+                            </TabsContent>
+                            <TabsContent value='table'>
+                                <FileTable columns={columns} files={getFiles} />
+                            </TabsContent>
+                        </Tabs>
                         {query &&
                             getFiles?.length === 0 &&
                             noFilesFound(orgId, 'search')}
-                        <div className='grid grid-cols-1 gap-4 md:grid-cols-3 lg:grid-cols-4 mt-4'>
-                            {getFiles?.map((file) => {
-                                return <FileCard file={file} key={file._id} />;
-                            })}
-                        </div>
                     </div>
                 )}
                 {getFiles === undefined && (
@@ -76,7 +103,7 @@ export default function FileBrowser({ title, favorites, trash }: { title: string
 
 function noFilesFound(
     orgId: string | undefined,
-    placeholderType: string = 'no files',
+    placeholderType: string = 'no files'
 ) {
     const imagePlaceholder =
         placeholderType === 'search' ? zeroSearchResults : imageFolder;
