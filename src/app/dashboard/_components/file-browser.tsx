@@ -58,7 +58,7 @@ export default function FileBrowser({
                         </div>
                     </div>
                     <Tabs defaultValue='grid'>
-                        <TabsList className='mb-2'>
+                        <TabsList className='mb-2 bg-myOffblack'>
                             <TabsTrigger value='grid'>
                                 <LayoutGrid size={16} />
                             </TabsTrigger>

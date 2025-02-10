@@ -19,9 +19,9 @@ export default function Sidebar() {
                 <Button
                     variant={'link'}
                     className={clsx(
-                        'text-sm',
+                        'text-sm text-myOffblack',
                         currentPath === '/dashboard/files' &&
-                            'font-bold text-myLightblue'
+                            'font-bold text-myRed'
                     )}
                 >
                     <FileIcon className='transform scale-150' /> All Files
@@ -32,9 +32,9 @@ export default function Sidebar() {
                 <Button
                     variant={'link'}
                     className={clsx(
-                        'text-sm',
+                        'text-sm text-myOffblack',
                         currentPath === '/dashboard/favorites' &&
-                            'font-bold text-myLightblue'
+                            'font-bold text-myRed'
                     )}
                 >
                     <StarIcon className='transform scale-150' /> Favorites
@@ -44,9 +44,9 @@ export default function Sidebar() {
                 <Button
                     variant={'link'}
                     className={clsx(
-                        'text-sm',
+                        'text-sm text-myOffblack',
                         currentPath === '/dashboard/trash' &&
-                            'font-bold text-myLightblue'
+                            'font-bold text-myRed'
                     )}
                 >
                     <Trash2 className='transform scale-150' /> Trash

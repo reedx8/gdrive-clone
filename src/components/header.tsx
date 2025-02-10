@@ -5,7 +5,7 @@ import {
     SignInButton,
     UserButton,
 } from '@clerk/nextjs';
-import logo from '/public/filehub.png';
+import logo from '/public/xflare.png';
 import Image from 'next/image';
 import Link from 'next/link';
 
