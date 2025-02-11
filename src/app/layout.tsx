@@ -19,8 +19,8 @@ const geistMono = localFont({
 });
 
 export const metadata: Metadata = {
-    title: 'GDrive Clone',
-    description: 'Google Drive Clone',
+    title: 'XFLARE',
+    description: 'File Storage',
 };
 
 export default function RootLayout({
