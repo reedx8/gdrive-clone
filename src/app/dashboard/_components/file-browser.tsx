@@ -13,6 +13,14 @@ import { useState } from 'react';
 import FileTable from './file-table';
 import { columns } from './columns';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from '@/components/ui/select';
+import { Doc } from '../../../../convex/_generated/dataModel';
 
 export default function FileBrowser({
     title,
@@ -24,6 +32,9 @@ export default function FileBrowser({
     trash?: boolean;
 }) {
     const [query, setQuery] = useState('');
+    const [fileType, setFileType] = useState<Doc<'files'>['type'] | 'all'>(
+        'all'
+    );
     // const [view, setView] = useState('cards');
     let orgId: string | undefined = undefined;
     // let orgId: string | undefined;
@@ -39,7 +50,15 @@ export default function FileBrowser({
     // Fetch files from the convex api depending on type of file requested (all files, favorite files, or files in trash)
     const getFiles = useQuery(
         api.files.getFiles,
-        orgId ? { orgId, query, favorites, trash } : 'skip'
+        orgId
+            ? {
+                  orgId,
+                  query,
+                  favorites,
+                  trash,
+                  fileType: fileType === 'all' ? undefined : fileType,
+              }
+            : 'skip'
     );
     // const isLoading = getFiles === undefined;
     // console.log(query);
@@ -58,14 +77,38 @@ export default function FileBrowser({
                         </div>
                     </div>
                     <Tabs defaultValue='grid'>
-                        <TabsList className='mb-2 bg-myOffblack'>
-                            <TabsTrigger value='grid'>
-                                <LayoutGrid size={16} />
-                            </TabsTrigger>
-                            <TabsTrigger value='table'>
-                                <List size={16} />
-                            </TabsTrigger>
-                        </TabsList>
+                        <div className='flex justify-between items-center'>
+                            <TabsList className='mb-2 bg-myOffblack'>
+                                <TabsTrigger value='grid'>
+                                    <LayoutGrid size={16} />
+                                </TabsTrigger>
+                                <TabsTrigger value='table'>
+                                    <List size={16} />
+                                </TabsTrigger>
+                            </TabsList>
+                            <div>
+                                <Select
+                                    value={fileType}
+                                    onValueChange={(newType) => {
+                                        setFileType(newType as any);
+                                    }}
+                                >
+                                    <SelectTrigger className='w-[180px]'>
+                                        <SelectValue placeholder='All' />
+                                    </SelectTrigger>
+                                    <SelectContent>
+                                        <SelectItem value='all'>
+                                            All
+                                        </SelectItem>
+                                        <SelectItem value='image'>
+                                            Image
+                                        </SelectItem>
+                                        <SelectItem value='csv'>CSV</SelectItem>
+                                        <SelectItem value='pdf'>PDF</SelectItem>
+                                    </SelectContent>
+                                </Select>
+                            </div>
+                        </div>
                         <TabsContent value='grid'>
                             <div className='grid grid-cols-1 gap-4 md:grid-cols-3 lg:grid-cols-4'>
                                 {getFiles?.map((file) => {

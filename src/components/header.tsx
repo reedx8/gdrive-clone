@@ -11,22 +11,24 @@ import Link from 'next/link';
 
 export function Header() {
     return (
-        <div className='border-b py-2 bg-gray-50'>
+        <header className='relative z-10 border-b py-2 bg-gray-50'>
             <div className='flex justify-between mx-4'>
                 <Link href='/'>
-                    <Image src={logo} alt='filehub logo' width={100} />
+                    <Image src={logo} alt='logo' width={100} />
                 </Link>
                 <div>
                     <OrganizationSwitcher />
                     <SignedOut>
                         <SignInButton />
+                        {/* <RedirectToSignIn signInFallbackRedirectUrl={'/dashboard'} /> */}
                     </SignedOut>
                     <SignedIn>
                         <UserButton />
+                        {/* <RedirectToSignIn signInFallbackRedirectUrl={'/dashboard'} /> */}
                     </SignedIn>
                 </div>
                 {/* <UserButton /> */}
             </div>
-        </div>
+        </header>
     );
 }

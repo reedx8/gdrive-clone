@@ -87,6 +87,7 @@ export const getFiles = query({
         query: v.optional(v.string()),
         favorites: v.optional(v.boolean()),
         trash: v.optional(v.boolean()),
+        fileType: v.optional(fileTypes),
     },
     async handler(ctx, args) {
         // Authenticating on the backend, and ensuring user has access to org
@@ -162,6 +163,10 @@ export const getFiles = query({
         } else {
             // Else, filter for files that are not marked for deletion and return them below
             files = files.filter((file) => !file.markedForDeletion);
+        }
+
+        if (args.fileType) {
+            files = files.filter((file) => file.type === args.fileType);
         }
 
         return files;
