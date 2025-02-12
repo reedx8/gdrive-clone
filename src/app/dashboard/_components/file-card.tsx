@@ -6,11 +6,7 @@ import {
     CardTitle,
 } from '@/components/ui/card';
 import { Doc } from '../../../../convex/_generated/dataModel';
-import {
-    FileTextIcon,
-    GanttChartIcon,
-    ImageIcon,
-} from 'lucide-react';
+import { FileTextIcon, GanttChartIcon, ImageIcon } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useQuery } from 'convex/react';
 import { api } from '../../../../convex/_generated/api';
@@ -18,10 +14,10 @@ import { ReactNode } from 'react';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { formatRelative } from 'date-fns';
 import { FileActions } from './file-actions';
+// import Image from 'next/image';
 // import { restoreFile } from '../../../../convex/files';
 // import Image from 'next/image';
 // import { deleteFile } from '../../convex/files';
-
 
 // TODO
 // function getFileUrl(fileId: Id<"_storage">): string {
@@ -30,7 +26,11 @@ import { FileActions } from './file-actions';
 // }
 
 // Definine file is of type Doc<"files">
-export function FileCard({ file }: { file: Doc<'files'> }) {
+export function FileCard({
+    file,
+}: {
+    file: Doc<'files'> ;
+}) {
     const typeIcons = {
         image: <ImageIcon />,
         pdf: <FileTextIcon />,
@@ -40,8 +40,18 @@ export function FileCard({ file }: { file: Doc<'files'> }) {
         userId: file.userId,
     });
 
-    // const getFileUrl = useQuery(api.files.getFileUrl, { fileId: file.fileId });
-    // const fileUrl = useQuery(api.files.getFileUrl, { fileId: file.fileId });
+    const downloadFile = async (file: Doc<'files'>) => {
+        if (!file.url) return;
+
+        const response = await fetch(file.url);
+        const blob = await response.blob();
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = file.name;
+        a.click();
+        window.URL.revokeObjectURL(url);
+    };
 
     return (
         <Card>
@@ -68,6 +78,7 @@ export function FileCard({ file }: { file: Doc<'files'> }) {
                     <GanttChartIcon className='w-16 h-16' />
                 )}
                 {file.type === 'pdf' && <FileTextIcon className='w-16 h-16' />}
+                {/* {file.type === 'image' && file.url && <Image src={file.url} alt={file.name} width={100} height={100} />} */}
                 {file.type === 'image' && <ImageIcon className='w-16 h-16' />}
             </CardContent>
             <CardFooter className='flex justify-center'>
@@ -81,10 +92,21 @@ export function FileCard({ file }: { file: Doc<'files'> }) {
                         </Avatar>
                         {userProfile?.name}
                     </div>
-                    <Button size='sm'>Download</Button>
+                    <Button
+                        size='sm'
+                        onClick={() => {
+                            downloadFile(file);
+
+                            // if (!file.url) return;
+                            // window.open(file.url);
+                        }}
+                    >
+                        Download
+                    </Button>
                 </div>
-                {/* <Button onClick={() => {window.open(getFileUrl(file.fileId, "_blank"))}}>Download</Button> */}
             </CardFooter>
         </Card>
     );
 }
+
+

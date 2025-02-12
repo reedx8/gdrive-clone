@@ -70,12 +70,18 @@ export const createFile = mutation({
             return null;
         }
 
+        const fileUrl = await ctx.storage.getUrl(args.fileId);
+        if (!fileUrl) {
+            throw new ConvexError('File not found');
+        }
+
         await ctx.db.insert('files', {
             name: args.name,
             orgId: args.orgId,
             fileId: args.fileId,
             type: args.type,
             userId: user._id,
+            url: fileUrl,
         });
     },
 });
@@ -88,6 +94,7 @@ export const getFiles = query({
         favorites: v.optional(v.boolean()),
         trash: v.optional(v.boolean()),
         fileType: v.optional(fileTypes),
+        url: v.optional(v.string()),
     },
     async handler(ctx, args) {
         // Authenticating on the backend, and ensuring user has access to org
@@ -168,6 +175,14 @@ export const getFiles = query({
         if (args.fileType) {
             files = files.filter((file) => file.type === args.fileType);
         }
+
+        // const filesWithUrl = await Promise.all(
+        //     files.map(async (file) => ({
+        //         ...file,
+        //         url: await ctx.storage.getUrl(file.fileId),
+        //     }))
+        // );
+        // return filesWithUrl;
 
         return files;
     },
@@ -306,8 +321,10 @@ async function hasAccessToFile(
 //         fileId: v.id('_storage'),
 //     },
 //     async handler(ctx, args) {
-//         // return `https://quick-capybara-655.convex.cloud/api/storage/${args.fileId}`
-//         if args.fileId.type
-//         return await ctx.storage.getUrl(args.fileId);
+
+//         const filesWithUrl = await Promise.all(
+//             File
+//         )
+
 //     },
 // });

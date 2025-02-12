@@ -18,6 +18,7 @@ export default defineSchema({
         type: fileTypes,
         userId: v.id('users'),
         markedForDeletion: v.optional(v.boolean()),
+        url: v.string(),
     })
         .index('by_orgId', ['orgId'])
         .index('by_markedForDeletion', ['markedForDeletion']),
