@@ -14,7 +14,7 @@ import { ReactNode } from 'react';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { formatRelative } from 'date-fns';
 import { FileActions } from './file-actions';
-// import Image from 'next/image';
+import Image from 'next/image';
 // import { restoreFile } from '../../../../convex/files';
 // import Image from 'next/image';
 // import { deleteFile } from '../../convex/files';
@@ -78,8 +78,8 @@ export function FileCard({
                     <GanttChartIcon className='w-16 h-16' />
                 )}
                 {file.type === 'pdf' && <FileTextIcon className='w-16 h-16' />}
-                {/* {file.type === 'image' && file.url && <Image src={file.url} alt={file.name} width={100} height={100} />} */}
-                {file.type === 'image' && <ImageIcon className='w-16 h-16' />}
+                {file.type === 'image' && file.url && <Image src={file.url} alt={file.name} width={100} height={100} />}
+                {/* {file.type === 'image' && <ImageIcon className='w-16 h-16' />} */}
             </CardContent>
             <CardFooter className='flex justify-center'>
                 {/* {userProfile?.name} */}
