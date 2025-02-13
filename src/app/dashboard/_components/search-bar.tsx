@@ -18,7 +18,7 @@ const querySchema = z.object({
     query: z.string().min(0).max(200),
 });
 
-export default function SearchBar({query, setQuery}: {query: string, setQuery: React.Dispatch<React.SetStateAction<string>>}) {
+export default function SearchBar({setQuery}: {query?: string, setQuery: React.Dispatch<React.SetStateAction<string>>}) {
     const form = useForm<z.infer<typeof querySchema>>({
         resolver: zodResolver(querySchema),
         defaultValues: {

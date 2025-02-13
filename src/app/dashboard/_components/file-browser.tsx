@@ -90,7 +90,7 @@ export default function FileBrowser({
                                 <Select
                                     value={fileType}
                                     onValueChange={(newType) => {
-                                        setFileType(newType as any);
+                                        setFileType(newType as Doc<'files'>['type']);
                                     }}
                                 >
                                     <SelectTrigger className='w-[180px]'>

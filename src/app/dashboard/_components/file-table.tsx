@@ -1,6 +1,6 @@
 import { ColumnDef } from "@tanstack/react-table"
 import { Doc } from "../../../../convex/_generated/dataModel"
-import { Payment, columns } from "./columns"
+// import { Payment, columns } from "./columns"
 import { DataTable } from "./data-table"
 
 // async function getData(): Promise<Doc<'files'>[]> {
