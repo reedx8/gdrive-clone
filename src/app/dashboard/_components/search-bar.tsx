@@ -1,5 +1,5 @@
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useForm } from 'react-hook-form';
+import { useForm, UseFormReturn } from 'react-hook-form';
 import { z } from 'zod';
 import {
     Form,
@@ -11,14 +11,14 @@ import {
     FormMessage,
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
-import { Loader2, SearchIcon } from 'lucide-react';
+import { Loader2, SearchIcon, XIcon } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
 const querySchema = z.object({
     query: z.string().min(0).max(200),
 });
 
-export default function SearchBar({setQuery}: {query?: string, setQuery: React.Dispatch<React.SetStateAction<string>>}) {
+export default function SearchBar({query, setQuery}: {query?: string, setQuery: React.Dispatch<React.SetStateAction<string>>}) {
     const form = useForm<z.infer<typeof querySchema>>({
         resolver: zodResolver(querySchema),
         defaultValues: {
@@ -30,6 +30,10 @@ export default function SearchBar({setQuery}: {query?: string, setQuery: React.D
         // console.log(values.query)
         setQuery(values.query);
     }
+    function handleClear(form: UseFormReturn<z.infer<typeof querySchema>>) {
+        form.reset();
+        setQuery('');
+    }
 
     return (
         <div>
@@ -37,6 +41,7 @@ export default function SearchBar({setQuery}: {query?: string, setQuery: React.D
                 <form
                     onSubmit={form.handleSubmit(onSubmit)}
                     className='flex items-center gap-2'
+                    onReset={() => handleClear(form)}
                 >
                     <FormField
                         control={form.control}
@@ -54,6 +59,9 @@ export default function SearchBar({setQuery}: {query?: string, setQuery: React.D
                             </FormItem>
                         )}
                     />
+                    {query && query?.trim() !== '' && ( <Button type='reset' variant='outline' size="sm">
+                        <XIcon/>
+                    </Button>)}
                     {/* To get spinning loader in shadcn button while submitting, add disabled={form.formState.isSubmitting} */}
                     <Button
                         size="sm"
@@ -66,6 +74,7 @@ export default function SearchBar({setQuery}: {query?: string, setQuery: React.D
                         )}
                         <SearchIcon/> Search
                     </Button>
+
                 </form>
             </Form>
         </div>
