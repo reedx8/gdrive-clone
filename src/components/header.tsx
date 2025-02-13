@@ -8,6 +8,7 @@ import {
 import logo from '/public/xflare.png';
 import Image from 'next/image';
 import Link from 'next/link';
+import { Button } from './ui/button';
 
 export function Header() {
     return (
@@ -19,7 +20,9 @@ export function Header() {
                 <div>
                     <OrganizationSwitcher />
                     <SignedOut>
-                        <SignInButton />
+                        <SignInButton>
+                            <Button size='sm' variant='outline'>Sign In</Button>
+                        </SignInButton>
                         {/* <RedirectToSignIn signInFallbackRedirectUrl={'/dashboard'} /> */}
                     </SignedOut>
                     <SignedIn>
