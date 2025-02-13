@@ -54,3 +54,36 @@ export const columns: ColumnDef<Doc<'files'>>[] = [
         },
     }
 ];
+
+export const trashColumns: ColumnDef<Doc<'files'>>[] = [
+    {
+        accessorKey: 'name',
+        header: 'Name',
+    },
+    {
+        accessorKey: 'type',
+        header: 'Type',
+    },
+    {
+        header: 'User',
+        cell: ({ row }) => {
+            return <UserCell userId={row.original.userId} />;
+        },
+    },
+    {
+        header: 'Uploaded On',
+        cell: ({ row }) => {
+            const formattedDate = formatRelative(
+                new Date(row.original._creationTime),
+                new Date()
+            );
+            return <div className='text-neutral-500'>{formattedDate}</div>;
+        },
+    },
+    {
+        header: 'Actions',
+        cell: ({ row }) => {
+            return <div className='w-1'><FileActions file={row.original} trash={true} /></div>;
+        },
+    }
+];

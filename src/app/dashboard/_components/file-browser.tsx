@@ -11,7 +11,7 @@ import { useQuery } from 'convex/react';
 import { api } from '../../../../convex/_generated/api';
 import { useState } from 'react';
 import FileTable from './file-table';
-import { columns } from './columns';
+import { columns, trashColumns } from './columns';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import {
     Select,
@@ -113,14 +113,14 @@ export default function FileBrowser({
                             <div className='grid grid-cols-1 gap-4 md:grid-cols-3 lg:grid-cols-4'>
                                 {getFiles?.map((file) => {
                                     return (
-                                        <FileCard file={file} key={file._id} />
+                                        <FileCard file={file} key={file._id} trash={trash ? true : false} />
                                     );
                                 })}
                             </div>
                         </TabsContent>
                         <TabsContent value='table'>
                             {getFiles && (
-                                <FileTable columns={columns} files={getFiles} />
+                                <FileTable columns={trash ? trashColumns : columns} files={getFiles} />
                             )}
                         </TabsContent>
                     </Tabs>

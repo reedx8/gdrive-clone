@@ -28,8 +28,10 @@ import Image from 'next/image';
 // Definine file is of type Doc<"files">
 export function FileCard({
     file,
+    trash,
 }: {
     file: Doc<'files'> ;
+    trash?: boolean;
 }) {
     const typeIcons = {
         image: <ImageIcon />,
@@ -62,7 +64,7 @@ export function FileCard({
                     {/* <FileCardActions /> */}
                 </CardTitle>
                 <div className='absolute right-2 top-2'>
-                    <FileActions file={file} />
+                    <FileActions file={file} trash={trash ? true : false} />
                 </div>
                 <p className='text-xs text-neutral-500'>
                     Uploaded On:{' '}
@@ -92,6 +94,7 @@ export function FileCard({
                         </Avatar>
                         {userProfile?.name}
                     </div>
+                    {!trash && (
                     <Button
                         size='sm'
                         onClick={() => {
@@ -103,6 +106,7 @@ export function FileCard({
                     >
                         Download
                     </Button>
+                    )}
                 </div>
             </CardFooter>
         </Card>

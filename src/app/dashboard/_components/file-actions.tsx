@@ -1,10 +1,5 @@
 import { Doc } from '../../../../convex/_generated/dataModel';
-import {
-    MoreVertical,
-    StarIcon,
-    TrashIcon,
-    UndoIcon,
-} from 'lucide-react';
+import { MoreVertical, StarIcon, TrashIcon, UndoIcon } from 'lucide-react';
 import {
     DropdownMenu,
     DropdownMenuContent,
@@ -20,7 +15,7 @@ import { DropdownMenuSeparator } from '@radix-ui/react-dropdown-menu';
 // import Image from 'next/image';
 // import { deleteFile } from '../../convex/files';
 
-export function FileActions({ file }: { file: Doc<'files'> }) {
+export function FileActions({ file, trash }: { file: Doc<'files'>; trash?: boolean }) {
     const deleteFile = useMutation(api.files.deleteFile);
     const restoreFile = useMutation(api.files.restoreFile);
     const toggleFavorite = useMutation(api.files.toggleFavorite);
@@ -35,30 +30,33 @@ export function FileActions({ file }: { file: Doc<'files'> }) {
                 <MoreVertical className='h-5 w-5' />
             </DropdownMenuTrigger>
             <DropdownMenuContent>
-                <DropdownMenuItem
-                    className='flex gap-1 items-center cursor-pointer'
-                    onClick={async () => {
-                        const isFavorite = await toggleFavorite({
-                            fileId: file._id,
-                        });
-                        if (isFavorite) {
-                            toast({
-                                variant: 'default',
-                                title: 'File favorited',
-                                description: 'File added to your favorites',
+                {!trash && (
+                    <DropdownMenuItem
+                        className='flex gap-1 items-center cursor-pointer'
+                        onClick={async () => {
+                            const isFavorite = await toggleFavorite({
+                                fileId: file._id,
                             });
-                        } else {
-                            toast({
-                                variant: 'default',
-                                title: 'File unfavorited',
-                                description: 'File removed from your favorites',
-                            });
-                        }
-                    }}
-                >
-                    <StarIcon className='h-4 w-4' />
-                    Favorite
-                </DropdownMenuItem>
+                            if (isFavorite) {
+                                toast({
+                                    variant: 'default',
+                                    title: 'File favorited',
+                                    description: 'File added to your favorites',
+                                });
+                            } else {
+                                toast({
+                                    variant: 'default',
+                                    title: 'File unfavorited',
+                                    description:
+                                        'File removed from your favorites',
+                                });
+                            }
+                        }}
+                    >
+                        <StarIcon className='h-4 w-4' />
+                        Favorite
+                    </DropdownMenuItem>
+                )}
                 <DropdownMenuSeparator />
                 <DropdownMenuItem
                     className='flex gap-1 items-center cursor-pointer'
