@@ -10,12 +10,19 @@ import { useMutation } from 'convex/react';
 import { api } from '../../../../convex/_generated/api';
 import { useToast } from '@/hooks/use-toast';
 import { DropdownMenuSeparator } from '@radix-ui/react-dropdown-menu';
+// import { Protect } from '@clerk/nextjs';
 
 // import { restoreFile } from '../../../../convex/files';
 // import Image from 'next/image';
 // import { deleteFile } from '../../convex/files';
 
-export function FileActions({ file, trash }: { file: Doc<'files'>; trash?: boolean }) {
+export function FileActions({
+    file,
+    trash,
+}: {
+    file: Doc<'files'>;
+    trash?: boolean;
+}) {
     const deleteFile = useMutation(api.files.deleteFile);
     const restoreFile = useMutation(api.files.restoreFile);
     const toggleFavorite = useMutation(api.files.toggleFavorite);
@@ -58,39 +65,41 @@ export function FileActions({ file, trash }: { file: Doc<'files'>; trash?: boole
                     </DropdownMenuItem>
                 )}
                 <DropdownMenuSeparator />
-                <DropdownMenuItem
-                    className='flex gap-1 items-center cursor-pointer'
-                    onClick={async () => {
-                        if (file.markedForDeletion) {
-                            restoreFile({ fileId: file._id });
-                            toast({
-                                variant: 'default',
-                                title: 'File Restored',
-                                description: 'Your file has been restored',
-                            });
-                        } else {
-                            deleteFile({ fileId: file._id });
-                            toast({
-                                variant: 'default',
-                                title: 'File Deleted',
-                                description:
-                                    'Your file has been moved to trash',
-                            });
-                        }
-                    }}
-                >
-                    {file.markedForDeletion ? (
-                        <div className='flex gap-1 items-center cursor-pointer text-green-500'>
-                            <UndoIcon className='h-4 w-4' /> Restore{' '}
-                        </div>
-                    ) : (
-                        <div className='flex gap-1 items-center cursor-pointer text-red-500'>
-                            <TrashIcon className='h-4 w-4' /> Delete
-                        </div>
-                    )}
-                    {/* <TrashIcon className='h-4 w-4' /> */}
-                    {/* Delete */}
-                </DropdownMenuItem>
+                {/* <Protect role='org:admin'> */}
+                    <DropdownMenuItem
+                        className='flex gap-1 items-center cursor-pointer'
+                        onClick={async () => {
+                            if (file.markedForDeletion) {
+                                restoreFile({ fileId: file._id });
+                                toast({
+                                    variant: 'default',
+                                    title: 'File Restored',
+                                    description: 'Your file has been restored',
+                                });
+                            } else {
+                                deleteFile({ fileId: file._id });
+                                toast({
+                                    variant: 'default',
+                                    title: 'File Deleted',
+                                    description:
+                                        'Your file has been moved to trash',
+                                });
+                            }
+                        }}
+                    >
+                        {file.markedForDeletion ? (
+                            <div className='flex gap-1 items-center cursor-pointer text-green-500'>
+                                <UndoIcon className='h-4 w-4' /> Restore{' '}
+                            </div>
+                        ) : (
+                            <div className='flex gap-1 items-center cursor-pointer text-red-500'>
+                                <TrashIcon className='h-4 w-4' /> Delete
+                            </div>
+                        )}
+                        {/* <TrashIcon className='h-4 w-4' /> */}
+                        {/* Delete */}
+                    </DropdownMenuItem>
+                {/* </Protect> */}
             </DropdownMenuContent>
         </DropdownMenu>
     );
