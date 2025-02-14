@@ -1,7 +1,7 @@
 // 'use client';
 // import { useState } from 'react';
-import logo from '/public/xflare.png';
-import Image from 'next/image';
+// import logo from '/public/vydrive.png';
+// import Image from 'next/image';
 import Link from 'next/link';
 
 export default function Example() {
@@ -10,7 +10,7 @@ export default function Example() {
     return (
         <div className='bg-white'>
             <div className='flex flex-col items-center pt-4'>
-                <Image src={logo} alt='logo' width={300} height={300} />
+                {/* <Image src={logo} alt='logo' width={300} height={300} /> */}
             </div>
             <div className='relative isolate px-6 lg:px-8'>
                 <div
@@ -25,7 +25,7 @@ export default function Example() {
                         className='relative left-[calc(50%-11rem)] aspect-[1155/678] w-[36.125rem] -translate-x-1/2 rotate-[30deg] bg-gradient-to-tr from-[#ff80b5] to-[#9089fc] opacity-30 sm:left-[calc(50%-30rem)] sm:w-[72.1875rem]'
                     />
                 </div>
-                <div className='mx-auto max-w-2xl py-32 sm:py-48 lg:py-56'>
+                <div className='mx-auto max-w-2xl py-32 sm:py-8 lg:py-16'>
                     <div className='hidden sm:mb-8 sm:flex sm:justify-center'>
                         <div className='relative rounded-full px-3 py-1 text-sm/6 text-gray-600 ring-1 ring-gray-900/10 hover:ring-gray-900/20'>
                             See what our business is about.{' '}

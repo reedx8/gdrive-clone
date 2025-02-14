@@ -5,7 +5,7 @@ import {
     SignInButton,
     UserButton,
 } from '@clerk/nextjs';
-import logo from '/public/xflare.png';
+import logo from '/public/fk.png';
 import Image from 'next/image';
 import Link from 'next/link';
 import { Button } from './ui/button';
@@ -15,7 +15,7 @@ export function Header() {
         <header className='relative z-10 border-b py-2 bg-gray-50'>
             <div className='flex justify-between mx-4'>
                 <Link href='/'>
-                    <Image src={logo} alt='logo' width={100} />
+                    <Image src={logo} alt='logo' width={30}/>
                 </Link>
                 <div>
                     <OrganizationSwitcher />

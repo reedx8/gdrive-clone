@@ -14,6 +14,7 @@ export default {
                 myRed: '#c0272d',
                 myDarkred: '#7f1f26',
                 myOffblack: '#1a1a1a',
+                myOffblack2: '#262626',
                 myDarkblue: '#2596be',
                 myLightblue: '#6ab3ec',
                 background: 'hsl(var(--background))',
