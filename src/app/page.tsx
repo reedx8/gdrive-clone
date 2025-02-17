@@ -1,21 +1,31 @@
-// 'use client';
-// import { useState } from 'react';
-// import logo from '/public/vydrive.png';
-// import Image from 'next/image';
+// Landing page
 import Link from 'next/link';
 
 export default function Example() {
     // const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
     return (
-        <div className='bg-white'>
-            <div className='flex flex-col items-center pt-4'>
-                {/* <Image src={logo} alt='logo' width={300} height={300} /> */}
-            </div>
-            <div className='relative isolate px-6 lg:px-8'>
+        <div className='relative w-full h-full'>
+            <video
+                autoPlay
+                loop
+                muted
+                playsInline
+                className='fixed top-0 left-0 w-full h-screen object-cover'
+            >
+                <source
+                    src='https://pfgxgvbovzogwfhejjus.supabase.co/storage/v1/object/public/media//aresvidbg.mp4'
+                    // src='https://media-hosting.imagekit.io//afef37f7f39e4cff/vidbg.mp4?Expires=1834358126&Key-Pair-Id=K2ZIVPTIP2VGHC&Signature=Xc2hOdFmC67sfHsRSqdiSSmybSR13iT-4DqGioNiRUwDWf7tVJdfpvcWWskz3M5Z61iWglQCcT5TxBd2dODQxZrFWeakYKXPynk6YPnLH9t7aQBNJ~iAE7I~2o7fhwImuDJ0A-H8hkhicDmJnhnkI6rKUHr9Di7Z8xTGuflIXJFF1lfaDR2Rb8yOR~-TXza6FTikXIgZoaqy6-ZVVIA8Hi62BjVyjIwJtYLEp-GxnQufcd-wZLO~-f5RstHxcCiXtWYgR9t-ZSqGjrWJvqZxqeLr1BUK9Z0Le3zBjwE2u38z4-PGucqHT3MUuK76DXz9g7ZxgI4Tu1CIAiO4CbDDUQ__'
+                    type='video/mp4'
+                />
+            </video>
+            {/* Overlay */}
+            <div className='fixed top-0 left-0 w-full h-screen bg-white/70' />
+            <div className='isolate px-6 lg:px-8 flex flex-col items-center'>
+                {/* <div className='relative isolate px-6 lg:px-8 flex flex-col items-center'> */}
                 <div
                     aria-hidden='true'
-                    className='absolute inset-x-0 -top-40 -z-10 transform-gpu overflow-hidden blur-3xl sm:-top-80'
+                    className='fixed inset-x-0 -top-40 -z-10 transform-gpu overflow-hidden blur-3xl sm:-top-80'
                 >
                     <div
                         style={{
@@ -25,8 +35,8 @@ export default function Example() {
                         className='relative left-[calc(50%-11rem)] aspect-[1155/678] w-[36.125rem] -translate-x-1/2 rotate-[30deg] bg-gradient-to-tr from-[#ff80b5] to-[#9089fc] opacity-30 sm:left-[calc(50%-30rem)] sm:w-[72.1875rem]'
                     />
                 </div>
-                <div className='mx-auto max-w-2xl py-32 sm:py-8 lg:py-16'>
-                    <div className='hidden sm:mb-8 sm:flex sm:justify-center'>
+                <div className='max-w-2xl py-24'>
+                    <div className='sm:mb-8 sm:flex sm:justify-center'>
                         <div className='relative rounded-full px-3 py-1 text-sm/6 text-gray-600 ring-1 ring-gray-900/10 hover:ring-gray-900/20'>
                             See what our business is about.{' '}
                             <a
@@ -44,7 +54,8 @@ export default function Example() {
                     <div className='text-center'>
                         {/* <Image src={logo} alt='logo' width={200} height={200} /> */}
                         <h1 className='text-balance text-5xl font-semibold tracking-tight text-gray-900 sm:text-7xl'>
-                            Storage to simplify your business
+                            <span className='text-indigo-600/70'>AI</span>
+                            -Powered File Storage
                         </h1>
                         <p className='mt-8 text-pretty text-lg font-medium text-gray-500 sm:text-xl/8'>
                             Make an account today to start managing your files
@@ -68,7 +79,8 @@ export default function Example() {
                 </div>
                 <div
                     aria-hidden='true'
-                    className='absolute inset-x-0 top-[calc(100%-13rem)] -z-10 transform-gpu overflow-hidden blur-3xl sm:top-[calc(100%-30rem)]'
+                    className='fixed inset-x-0 -top-70 -z-10 transform-gpu overflow-hidden blur-3xl sm:top-[calc(100%-40rem)]'
+                    // className='absolute inset-x-0 top-[calc(100%-13rem)] -z-10 transform-gpu overflow-hidden blur-3xl sm:top-[calc(100%-30rem)]'
                 >
                     <div
                         style={{

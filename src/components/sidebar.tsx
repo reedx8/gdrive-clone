@@ -21,7 +21,7 @@ export default function Sidebar() {
                     className={clsx(
                         'text-sm text-myOffblack',
                         currentPath === '/dashboard/files' &&
-                            'font-bold text-myRed'
+                            'font-bold text-indigo-600/70'
                     )}
                 >
                     <FileIcon className='transform scale-150' /> All Files
@@ -34,7 +34,7 @@ export default function Sidebar() {
                     className={clsx(
                         'text-sm text-myOffblack',
                         currentPath === '/dashboard/favorites' &&
-                            'font-bold text-myRed'
+                            'font-bold text-indigo-600/70'
                     )}
                 >
                     <StarIcon className='transform scale-150' /> Favorites
@@ -46,7 +46,7 @@ export default function Sidebar() {
                     className={clsx(
                         'text-sm text-myOffblack',
                         currentPath === '/dashboard/trash' &&
-                            'font-bold text-myRed'
+                            'font-bold text-indigo-600/70'
                     )}
                 >
                     <Trash2 className='transform scale-150' /> Trash

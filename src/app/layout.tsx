@@ -19,8 +19,8 @@ const geistMono = localFont({
 });
 
 export const metadata: Metadata = {
-    title: 'vydrive',
-    description: 'File Storage',
+    title: 'Ares',
+    description: 'AI-Powered File Storage',
 };
 
 export default function RootLayout({

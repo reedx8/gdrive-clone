@@ -21,6 +21,7 @@ import {
     SelectValue,
 } from '@/components/ui/select';
 import { Doc } from '../../../../convex/_generated/dataModel';
+import { ScrollArea } from '@/components/ui/scroll-area';
 
 export default function FileBrowser({
     title,
@@ -90,16 +91,16 @@ export default function FileBrowser({
                                 <Select
                                     value={fileType}
                                     onValueChange={(newType) => {
-                                        setFileType(newType as Doc<'files'>['type']);
+                                        setFileType(
+                                            newType as Doc<'files'>['type']
+                                        );
                                     }}
                                 >
                                     <SelectTrigger className='w-[180px]'>
                                         <SelectValue placeholder='All' />
                                     </SelectTrigger>
                                     <SelectContent>
-                                        <SelectItem value='all'>
-                                            All
-                                        </SelectItem>
+                                        <SelectItem value='all'>All</SelectItem>
                                         <SelectItem value='image'>
                                             Image
                                         </SelectItem>
@@ -110,17 +111,28 @@ export default function FileBrowser({
                             </div>
                         </div>
                         <TabsContent value='grid'>
-                            <div className='grid grid-cols-1 gap-4 md:grid-cols-3 lg:grid-cols-4'>
-                                {getFiles?.map((file) => {
-                                    return (
-                                        <FileCard file={file} key={file._id} trash={trash ? true : false} />
-                                    );
-                                })}
-                            </div>
+                            {getFiles && getFiles.length > 0 && (
+                                <ScrollArea className='h-[70vh] overflow-y-auto p-4'>
+                                    <div className='grid grid-cols-1 gap-4 md:grid-cols-3 lg:grid-cols-4'>
+                                        {getFiles?.map((file) => {
+                                            return (
+                                                <FileCard
+                                                    file={file}
+                                                    key={file._id}
+                                                    trash={trash ? true : false}
+                                                />
+                                            );
+                                        })}
+                                    </div>
+                                </ScrollArea>
+                            )}
                         </TabsContent>
                         <TabsContent value='table'>
-                            {getFiles && (
-                                <FileTable columns={trash ? trashColumns : columns} files={getFiles} />
+                            {getFiles && getFiles.length > 0 && (
+                                <FileTable
+                                    columns={trash ? trashColumns : columns}
+                                    files={getFiles}
+                                />
                             )}
                         </TabsContent>
                     </Tabs>
@@ -159,7 +171,7 @@ function noFilesFound(
     return (
         <div>
             {/* <div className="flex justify-end">{CreateFileModal(orgId)}</div> */}
-            <div className='flex flex-col justify-center align-middle mt-12'>
+            <div className='flex flex-col justify-center align-middle'>
                 <div className='flex flex-col items-center justify-center gap-4'>
                     <Image
                         src={imagePlaceholder}

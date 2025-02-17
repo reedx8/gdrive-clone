@@ -12,7 +12,7 @@ export default function DashboardLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <div className='flex mx-4 mt-6'>
+    <div className='flex mx-4 mt-16'>
       <Sidebar />
       {children}
     </div>
