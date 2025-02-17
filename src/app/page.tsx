@@ -1,11 +1,43 @@
 // Landing page
+'use client';
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
+import { Button } from '@/components/ui/button';
+import Image from 'next/image';
+import storagePic from '/public/server2.jpg';
+import fillerPic from '/public/aiPic.jpg';
+import { MoveRight } from 'lucide-react';
 
 export default function Example() {
     // const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+    const [opacity, setOpacity] = useState(0.6); // Starting opacity of 0.7 (70%)
+
+    useEffect(() => {
+        const handleScroll = () => {
+            // Get scroll position
+            const scrollPosition = window.scrollY;
+            // Get viewport height
+            const windowHeight = window.innerHeight;
+
+            // Calculate new opacity
+            // This will transition from 0.7 to 1 over one viewport height of scrolling
+            const newOpacity = Math.min(
+                1,
+                0.6 + (scrollPosition / windowHeight) * 0.3
+            );
+
+            setOpacity(newOpacity);
+        };
+
+        // Add scroll event listener
+        window.addEventListener('scroll', handleScroll);
+
+        // Cleanup
+        return () => window.removeEventListener('scroll', handleScroll);
+    }, []);
 
     return (
-        <div className='relative w-full h-full'>
+        <main className='relative w-full h-full'>
             <video
                 autoPlay
                 loop
@@ -20,8 +52,13 @@ export default function Example() {
                 />
             </video>
             {/* Overlay */}
-            <div className='fixed top-0 left-0 w-full h-screen bg-white/70' />
-            <div className='isolate px-6 lg:px-8 flex flex-col items-center'>
+            {/* <div className='fixed top-0 left-0 w-full h-screen bg-white/70' /> */}
+            {/* Dynamic Overlay */}
+            <div
+                className='fixed top-0 left-0 w-full h-screen bg-white transition-opacity duration-100'
+                style={{ opacity: opacity }}
+            />
+            <section className='isolate px-6 lg:px-8 flex flex-col items-center h-screen'>
                 {/* <div className='relative isolate px-6 lg:px-8 flex flex-col items-center'> */}
                 <div
                     aria-hidden='true'
@@ -35,9 +72,9 @@ export default function Example() {
                         className='relative left-[calc(50%-11rem)] aspect-[1155/678] w-[36.125rem] -translate-x-1/2 rotate-[30deg] bg-gradient-to-tr from-[#ff80b5] to-[#9089fc] opacity-30 sm:left-[calc(50%-30rem)] sm:w-[72.1875rem]'
                     />
                 </div>
-                <div className='max-w-2xl py-24'>
+                <div className='max-w-2xl py-24 flex flex-col gap-4 items-center'>
                     <div className='sm:mb-8 sm:flex sm:justify-center'>
-                        <div className='relative rounded-full px-3 py-1 text-sm/6 text-gray-600 ring-1 ring-gray-900/10 hover:ring-gray-900/20'>
+                        <div className='relative rounded-full w-fit px-3 py-1 text-sm/6 text-gray-600 ring-1 ring-gray-900/10 hover:ring-gray-900/20'>
                             See what our business is about.{' '}
                             <a
                                 href='#'
@@ -68,12 +105,12 @@ export default function Example() {
                             >
                                 Get started
                             </Link>
-                            <a
+                            <Link
                                 href='#'
                                 className='text-sm/6 font-semibold text-gray-900'
                             >
                                 Learn more <span aria-hidden='true'>→</span>
-                            </a>
+                            </Link>
                         </div>
                     </div>
                 </div>
@@ -90,7 +127,83 @@ export default function Example() {
                         className='relative left-[calc(50%+3rem)] aspect-[1155/678] w-[36.125rem] -translate-x-1/2 bg-gradient-to-tr from-[#ff80b5] to-[#9089fc] opacity-30 sm:left-[calc(50%+36rem)] sm:w-[72.1875rem]'
                     />
                 </div>
-            </div>
-        </div>
+            </section>
+            <section className='isolate mt-30 px-6 flex flex-col gap-10 sm:flex-row sm:gap-20 justify-between'>
+                <div>
+                    <h2 className='text-5xl text-black/80'>
+                        Secure cloud storage for all your files
+                    </h2>
+                </div>
+                <div className='flex flex-col gap-10 sm:mt-24'>
+                    <p className='text-lg text-black/80'>
+                        Documents, photos, videos and more—keep all your files
+                        and folders safe in online cloud storage. Ares offers
+                        one central hub for online file storage. Whether you’re
+                        at work or on the road, your files are accessible in
+                        real time.
+                    </p>
+                    <Button className='w-fit'>About us</Button>
+                </div>
+            </section>
+            <section className='isolate mx-6 grid sm:grid-cols-6 mt-52 group'>
+                <Image
+                    src={storagePic}
+                    alt='storage'
+                    className='col-span-4 w-full h-full'
+                    quality={100}
+                />
+                <div className='bg-indigo-100 col-span-2 p-6 flex flex-col gap-8'>
+                    <h2 className='text-sm text-black/80 font-extralight'>
+                        STORAGE
+                    </h2>
+                    <p className='text-2xl'>
+                        With 20 GB of total storage, you can store all your
+                        files in one place. You can also share files with your
+                        team or collaborate with others.
+                    </p>
+                    <Link
+                        href='#'
+                        className='text-sm/6 font-semibold text-gray-900'
+                    >
+                        Learn more
+                        <MoveRight
+                            // className='inline-block h-4 w-4'
+                            className='ml-2 inline-block transition-transform group-hover:translate-x-6 ease-in duration-300'
+                        />
+                        {/* <span
+                            aria-hidden='true'
+                            className='ml-1 inline-block transition-transform group-hover:translate-x-6 ease-in duration-300'
+                        >
+                            →
+                        </span> */}
+                    </Link>
+                </div>
+            </section>
+            <section className='isolate mx-6 mt-12 h-[350px] relative group'>
+                <Image
+                    src={fillerPic}
+                    alt='filler'
+                    className='w-full h-full object-cover absolute'
+                    quality={100}
+                />
+                <div className='absolute flex flex-col p-6 justify-between h-full'>
+                    <h2 className='text-black/80 text-sm font-extralight'>AI-POWERED</h2>
+                    <div className='text-6xl flex flex-col gap-2 font-extralight'>
+                        <h2>Store.</h2>
+                        <h2>Query.</h2>
+                        <h2>Decide.</h2>
+                    </div>
+                    <div>
+                        <Link href='#' className='text-sm/6'>
+                            See our AI models{' '}
+                            <MoveRight
+                                // className='inline-block h-4 w-4'
+                                className='ml-2 inline-block transition-transform group-hover:translate-x-6 ease-in duration-300'
+                            />
+                        </Link>
+                    </div>
+                </div>
+            </section>
+        </main>
     );
 }
