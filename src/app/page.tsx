@@ -11,6 +11,10 @@ import { MoveRight } from 'lucide-react';
 export default function Example() {
     // const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
     const [opacity, setOpacity] = useState(0.6); // Starting opacity of 0.7 (70%)
+    const [isLoaded, setIsLoaded] = useState(false);
+    const fullText = 'AI-Powered File Storage';
+    const [text, setText] = useState('');
+    const [showCursor, setShowCursor] = useState(true);
 
     useEffect(() => {
         const handleScroll = () => {
@@ -22,19 +26,52 @@ export default function Example() {
             // Calculate new opacity
             // This will transition from 0.7 to 1 over one viewport height of scrolling
             const newOpacity = Math.min(
-                1,
+                0.8,
                 0.6 + (scrollPosition / windowHeight) * 0.3
             );
 
             setOpacity(newOpacity);
         };
 
+        // animate typing:
+        let currentIndex = 0;
+        const typingInterval = setInterval(() => {
+            if (currentIndex <= fullText.length) {
+                setText(fullText.slice(0, currentIndex));
+                ++currentIndex;
+            } else {
+                clearInterval(typingInterval);
+            }
+        }, 100); // Adjust speed 
+
+        // Cursor blinking effect
+        const cursorInterval = setInterval(() => {
+            setShowCursor((prev) => !prev);
+        }, 500);
+
         // Add scroll event listener
         window.addEventListener('scroll', handleScroll);
+        setIsLoaded(true);
 
         // Cleanup
-        return () => window.removeEventListener('scroll', handleScroll);
+        return () => {
+            window.removeEventListener('scroll', handleScroll);
+            clearInterval(typingInterval);
+            clearInterval(cursorInterval);
+        };
     }, []);
+
+    const splitText = () => {
+        const parts = text.split('AI');
+        if (parts.length === 1) return parts[0];
+        return (
+            <>
+                {parts[0]}
+                <span className='text-indigo-600/70'>AI</span>
+                {parts[1]}
+            </>
+        );
+    };
 
     return (
         <main className='relative w-full h-full'>
@@ -43,7 +80,9 @@ export default function Example() {
                 loop
                 muted
                 playsInline
-                className='fixed top-0 left-0 w-full h-screen object-cover'
+                onLoadedData={() => setIsLoaded(true)}
+                className={`fixed top-0 left-0 w-full h-screen object-cover transition-opacity ease-in-out duration-1000 ${isLoaded ? 'opacity-100' : 'opacity-0'}`}
+                // style={{transitionDuration: '1500ms'}}
             >
                 <source
                     src='https://pfgxgvbovzogwfhejjus.supabase.co/storage/v1/object/public/media//aresvidbg.mp4'
@@ -58,7 +97,7 @@ export default function Example() {
                 className='fixed top-0 left-0 w-full h-screen bg-white transition-opacity duration-100'
                 style={{ opacity: opacity }}
             />
-            <section className='isolate px-6 lg:px-8 flex flex-col items-center h-screen'>
+            <section className='isolate px-6 lg:px-8 flex flex-col items-center justify-center h-screen'>
                 {/* <div className='relative isolate px-6 lg:px-8 flex flex-col items-center'> */}
                 <div
                     aria-hidden='true'
@@ -90,18 +129,26 @@ export default function Example() {
                     </div>
                     <div className='text-center'>
                         {/* <Image src={logo} alt='logo' width={200} height={200} /> */}
-                        <h1 className='text-balance text-5xl font-semibold tracking-tight text-gray-900 sm:text-7xl'>
+                        {/* <h1 className='text-balance text-5xl font-semibold tracking-wide sm:text-7xl drop-shadow-md'>
                             <span className='text-indigo-600/70'>AI</span>
                             -Powered File Storage
+                        </h1> */}
+                        <h1 className='text-balance text-5xl font-semibold tracking-wide sm:text-7xl drop-shadow-md'>
+                            {splitText()}
+                            <span
+                                className={`${showCursor ? 'opacity-100' : 'opacity-0'} transition-opacity duration-100`}
+                            >
+                                |
+                            </span>
                         </h1>
-                        <p className='mt-8 text-pretty text-lg font-medium text-gray-500 sm:text-xl/8'>
+                        <p className='mt-8 text-pretty text-lg tracking-wide font-medium text-black sm:text-xl/8'>
                             Make an account today to start managing your files
                             in minutes
                         </p>
                         <div className='mt-10 flex items-center justify-center gap-x-6'>
                             <Link
                                 href='/dashboard/files'
-                                className='rounded-md bg-indigo-600 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600'
+                                className='rounded-md bg-indigo-600 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 drop-shadow-md'
                             >
                                 Get started
                             </Link>
@@ -136,11 +183,12 @@ export default function Example() {
                 </div>
                 <div className='flex flex-col gap-10 sm:mt-24'>
                     <p className='text-lg text-black/80'>
-                        Documents, photos, videos and more—keep all your files
-                        and folders safe in online cloud storage. Ares offers
-                        one central hub for online file storage. Whether you’re
-                        at work or on the road, your files are accessible in
-                        real time.
+                        Documents, PDFs, photos and more—keep all your files and
+                        folders safe in online cloud storage.{' '}
+                        <span className='text-indigo-600 italic'>Ares</span>{' '}
+                        offers one central hub for online file storage. Whether
+                        you’re at work or on the road, your files are accessible
+                        in real time.
                     </p>
                     <Button className='w-fit'>About us</Button>
                 </div>
@@ -187,7 +235,9 @@ export default function Example() {
                     quality={100}
                 />
                 <div className='absolute flex flex-col p-6 justify-between h-full'>
-                    <h2 className='text-black/80 text-sm font-extralight'>AI-POWERED</h2>
+                    <h2 className='text-black/80 text-sm font-extralight'>
+                        AI-POWERED
+                    </h2>
                     <div className='text-6xl flex flex-col gap-2 font-extralight'>
                         <h2>Store.</h2>
                         <h2>Query.</h2>
