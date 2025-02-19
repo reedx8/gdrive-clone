@@ -12,7 +12,7 @@ export default function Example() {
     // const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
     const [opacity, setOpacity] = useState(0.6); // Starting opacity of 0.7 (70%)
     const [isLoaded, setIsLoaded] = useState(false);
-    const fullText = 'AI-Powered File Storage';
+    // const fullText = 'AI-Powered File Storage';
     // const [text, setText] = useState('');
     // const [showCursor, setShowCursor] = useState(true);
 
