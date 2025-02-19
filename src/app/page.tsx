@@ -13,8 +13,8 @@ export default function Example() {
     const [opacity, setOpacity] = useState(0.6); // Starting opacity of 0.7 (70%)
     const [isLoaded, setIsLoaded] = useState(false);
     const fullText = 'AI-Powered File Storage';
-    const [text, setText] = useState('');
-    const [showCursor, setShowCursor] = useState(true);
+    // const [text, setText] = useState('');
+    // const [showCursor, setShowCursor] = useState(true);
 
     useEffect(() => {
         const handleScroll = () => {
@@ -34,20 +34,20 @@ export default function Example() {
         };
 
         // animate typing:
-        let currentIndex = 0;
-        const typingInterval = setInterval(() => {
-            if (currentIndex <= fullText.length) {
-                setText(fullText.slice(0, currentIndex));
-                ++currentIndex;
-            } else {
-                clearInterval(typingInterval);
-            }
-        }, 100); // Adjust speed 
+        // let currentIndex = 0;
+        // const typingInterval = setInterval(() => {
+        //     if (currentIndex <= fullText.length) {
+        //         setText(fullText.slice(0, currentIndex));
+        //         ++currentIndex;
+        //     } else {
+        //         clearInterval(typingInterval);
+        //     }
+        // }, 100); // Adjust speed 
 
         // Cursor blinking effect
-        const cursorInterval = setInterval(() => {
-            setShowCursor((prev) => !prev);
-        }, 500);
+        // const cursorInterval = setInterval(() => {
+        //     setShowCursor((prev) => !prev);
+        // }, 500);
 
         // Add scroll event listener
         window.addEventListener('scroll', handleScroll);
@@ -56,22 +56,22 @@ export default function Example() {
         // Cleanup
         return () => {
             window.removeEventListener('scroll', handleScroll);
-            clearInterval(typingInterval);
-            clearInterval(cursorInterval);
+            // clearInterval(typingInterval);
+            // clearInterval(cursorInterval);
         };
     }, []);
 
-    const splitText = () => {
-        const parts = text.split('AI');
-        if (parts.length === 1) return parts[0];
-        return (
-            <>
-                {parts[0]}
-                <span className='text-indigo-600/70'>AI</span>
-                {parts[1]}
-            </>
-        );
-    };
+    // const splitText = () => {
+    //     const parts = text.split('AI');
+    //     if (parts.length === 1) return parts[0];
+    //     return (
+    //         <>
+    //             {parts[0]}
+    //             <span className='text-indigo-600/70'>AI</span>
+    //             {parts[1]}
+    //         </>
+    //     );
+    // };
 
     return (
         <main className='relative w-full h-full'>
@@ -129,18 +129,18 @@ export default function Example() {
                     </div>
                     <div className='text-center'>
                         {/* <Image src={logo} alt='logo' width={200} height={200} /> */}
-                        {/* <h1 className='text-balance text-5xl font-semibold tracking-wide sm:text-7xl drop-shadow-md'>
+                        <h1 className='text-balance text-5xl font-semibold tracking-wide sm:text-7xl drop-shadow-md'>
                             <span className='text-indigo-600/70'>AI</span>
                             -Powered File Storage
-                        </h1> */}
-                        <h1 className='text-balance text-5xl font-semibold tracking-wide sm:text-7xl drop-shadow-md'>
-                            {splitText()}
-                            <span
+                        </h1> 
+                        {/* <h1 className='text-balance text-5xl font-semibold tracking-wide sm:text-7xl drop-shadow-md'> */}
+                            {/* {splitText()} */}
+                            {/* <span
                                 className={`${showCursor ? 'opacity-100' : 'opacity-0'} transition-opacity duration-100`}
                             >
                                 |
-                            </span>
-                        </h1>
+                            </span> */}
+                        {/* </h1> */}
                         <p className='mt-8 text-pretty text-lg tracking-wide font-medium text-black sm:text-xl/8'>
                             Make an account today to start managing your files
                             in minutes
