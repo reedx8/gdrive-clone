@@ -7,9 +7,9 @@ export function Footer() {
             <div className='flex flex-col gap-4 items-center'>
                 <div className='font-semibold'>ares.com</div>
                 <div className='flex gap-4 text-xs'>
-                    <Link href='/privacy'>Privacy Policy</Link>
-                    <Link href='/terms-of-service'>Terms of Service</Link>
-                    <Link href='/about'>About</Link>
+                    <Link href='#'>Privacy Policy</Link>
+                    <Link href='#'>Terms of Service</Link>
+                    <Link href='#'>About</Link>
                 </div>
                 <div className='text-neutral-500'>© 2025 ares.com. All Rights Reserved.</div>
             </div>
