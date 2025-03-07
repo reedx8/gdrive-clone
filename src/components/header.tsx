@@ -1,3 +1,4 @@
+'use client';
 import {
     OrganizationSwitcher,
     SignedIn,
@@ -9,7 +10,8 @@ import logo from '/public/ares.png';
 import Image from 'next/image';
 import Link from 'next/link';
 import { Button } from './ui/button';
-import { CircleUser } from 'lucide-react';
+import { CircleUser, Sparkles } from 'lucide-react';
+import ChatWindow  from './chatwindow';
 
 export function Header() {
     return (
@@ -18,6 +20,31 @@ export function Header() {
                 <Link href='/'>
                     <Image src={logo} alt='logo' width={100} />
                 </Link>
+                <SignedIn>
+                    <div className='relative rounded-md bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 p-[2px] inline-block'>
+                        <ChatWindow />
+                        {/* <ConvexAiChat
+                            convexUrl={
+                                process.env.NEXT_PUBLIC_CONVEX_URL as string
+                            }
+                            infoMessage='Type a message...'
+                            name='AI Assistant'
+                            welcomeMessage='Hey there, what can I answer about your business?'
+                            renderTrigger={(onClick) => (
+                                <Button
+                                    onClick={onClick}
+                                    size='sm'
+                                    variant='outline'
+                                    className='border-0 bg-indigo-100 m-0'
+                                    // className='bg-gradient-to-b from-indigo-500/80 to-indigo-500/50 text-white'
+                                    // className='bg-indigo-500/80 text-white'
+                                >
+                                    <Sparkles /> Ask AI
+                                </Button>
+                            )}
+                        /> */}
+                    </div>
+                </SignedIn>
                 <div>
                     <OrganizationSwitcher />
                     <SignedOut>
