@@ -3,7 +3,7 @@ import { action } from './_generated/server';
 import { ChatAnthropic } from '@langchain/anthropic';
 import { ChatOpenAI } from '@langchain/openai';
 
-export const createMessage = action({
+export const sendMessage = action({
     args: { textMessage: v.string() },
     handler: async (ctx, args) => {
         // const API_KEY = process.env.OPENAI_API_KEY;

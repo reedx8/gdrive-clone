@@ -11,18 +11,26 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { Button } from './ui/button';
 import { CircleUser, Sparkles } from 'lucide-react';
-import ChatWindow  from './chatwindow';
+import { ChatWindow, AiChatWindow } from './chatwindow';
 
 export function Header() {
     return (
         <header className='fixed top-0 w-full z-10 py-2 bg-transparent'>
+        {/* <header className='fixed top-5 w-[80vw] z-10 py-2 bg-white rounded-full shadow-md items-center'> */}
             <div className='flex justify-between mx-4'>
                 <Link href='/'>
                     <Image src={logo} alt='logo' width={100} />
                 </Link>
                 <SignedIn>
                     <div className='relative rounded-md bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 p-[2px] inline-block'>
-                        <ChatWindow />
+                        <AiChatWindow
+                            name='Ares AI'
+                            infoMessage='Type a message...'
+                            welcomeMessage='Hey there, what can I answer about your business?'
+                            renderTrigger={(onClick) => (
+                                <Button onClick={onClick} size='sm'><Sparkles /> Ask AI</Button>
+                            )}
+                        />
                         {/* <ConvexAiChat
                             convexUrl={
                                 process.env.NEXT_PUBLIC_CONVEX_URL as string

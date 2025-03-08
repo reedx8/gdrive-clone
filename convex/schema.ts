@@ -33,10 +33,9 @@ export default defineSchema({
         name: v.optional(v.string()),
         image: v.optional(v.string()),
     }).index('by_tokenIdentifier', ['tokenIdentifier']),
-    // The following was for Agentic RAG in convex (Not working):
+    // The following was for Agentic RAG in convex (Not working atm):
     cache: defineTable({
-        // not used
-        // simple cache to avoid recomputing embeddings
+        // simple cache to avoid recomputing embeddings (not used)
         key: v.string(), // content
         value: v.any(), // embedding
     }).index('byKey', ['key']),
@@ -46,8 +45,10 @@ export default defineSchema({
         fileId: v.union(v.string(), v.null()),
     }).index('byUrl', ['url']),
     messages: defineTable({
-        sessionId: v.string(), // who owns the message
-        isViewer: v.boolean(),
+        // Simply the chat messages/history
+        sessionId: v.optional(v.string()), // who owns the message
+        isHuman: v.optional(v.boolean()), // true if message from human, false if AI
+        // userId: v.id('users'),
         text: v.string(),
     }).index('bySessionId', ['sessionId']),
     threads: defineTable({
