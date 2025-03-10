@@ -48,9 +48,10 @@ export default defineSchema({
         // Simply the chat messages/history
         sessionId: v.optional(v.string()), // who owns the message
         isHuman: v.optional(v.boolean()), // true if message from human, false if AI
-        // userId: v.id('users'),
+        userId: v.id('users'),
         text: v.string(),
-    }).index('bySessionId', ['sessionId']),
+    }).index('byUserId', ['userId']),
+    // }).index('bySessionId', ['sessionId']),
     threads: defineTable({
         sessionId: v.string(),
         threadId: v.string(),

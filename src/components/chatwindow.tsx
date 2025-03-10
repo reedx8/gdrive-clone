@@ -1,7 +1,7 @@
 import { Button } from './ui/button';
 import { api } from '../../convex/_generated/api';
 // import { useMutation } from 'convex/react';
-import { useAction } from 'convex/react';
+import { useAction, useMutation, useQuery } from 'convex/react';
 import { createPortal } from 'react-dom';
 import { CloseIcon } from './svgIcons';
 import { InfoCircled } from './svgIcons';
@@ -23,6 +23,8 @@ import {
     useRef,
     useState,
 } from 'react';
+import { clear } from 'console';
+import { add } from 'date-fns';
 
 // Initial chat window, not used now
 export function ChatWindow() {
@@ -139,14 +141,17 @@ export function Dialog({
     //         ),
     //     [remoteMessages, welcomeMessage]
     // );
-    const sendMessage = useAction(api.messages.sendMessage);
+    const chatMessages = useQuery(api.messages.getMessages);
+    const saveMessages = useMutation(api.messages.saveMessages);
+    // const sendMessage = useAction(api.messages.sendMessage);
+    const getAiMsg = useAction(api.messages.getAiResponse);
     // const sendMessage = useMutation(api.messages.sendMessage);
-    // const clearMesages = useMutation(api.messages.clear);
+    const clearMessages = useMutation(api.messages.clearMessages);
     const [expanded, setExpanded] = useState(false);
     const [isScrolled, setScrolled] = useState(false);
     const [aiResponse, setAiResponse] = useState('') as any;
-
     const [input, setInput] = useState('');
+    const welcomeMessageSent = useRef(false);
 
     const handleExpand = () => {
         setExpanded(!expanded);
@@ -155,16 +160,27 @@ export function Dialog({
 
     const handleSend = async (event: FormEvent) => {
         event.preventDefault();
-        const response = await sendMessage({ textMessage: input });
+        const aiResponse = await getAiMsg({ textMessage: input });
+        await saveMessages({ userMessage: input, aiMessage: aiResponse });
         // await sendMessage({ textMessage: input, sessionId });
-        setAiResponse(response);
+        // setAiResponse(response);
         setInput('');
         setScrolled(false);
     };
 
-    const handleClearMessages = () => {
-        setAiResponse('');
+    // const handleSend = async (event: FormEvent) => {
+    //     event.preventDefault();
+    //     const response = await sendMessage({ textMessage: input });
+    //     // await sendMessage({ textMessage: input, sessionId });
+    //     setAiResponse(response);
+    //     setInput('');
+    //     setScrolled(false);
+    // };
+
+    const handleClearMessages = async () => {
+        await clearMessages();
         setInput('');
+        setScrolled(false);
     };
 
     // const handleClearMessages = async () => {
@@ -172,8 +188,16 @@ export function Dialog({
     //     setScrolled(false);
     // };
 
-    const listRef = useRef<HTMLDivElement>(null);
+    const handleClose = async () => {
+        if (chatMessages && chatMessages.length > 0) {
+            await clearMessages();
+        }
+        setInput('');
+        setScrolled(false);
+        onClose();
+    };
 
+    const listRef = useRef<HTMLDivElement>(null);
     useEffect(() => {
         if (isScrolled) {
             return;
@@ -230,7 +254,8 @@ export function Dialog({
                 </button>
                 <button
                     className='border-none bg-transparent p-0 pt-2 px-2 cursor-pointer hover:text-neutral-500 dark:hover:text-neutral-300'
-                    onClick={onClose}
+                    onClick={handleClose}
+                    // onClick={onClose}
                 >
                     <CloseIcon className='h-5 w-5' />
                 </button>
@@ -242,7 +267,59 @@ export function Dialog({
                     setScrolled(true);
                 }}
             >
-                {aiResponse === '' ? (
+                <div>
+                    <p className='text-sm text-neutral-400'>{name}</p>
+                    <div className='text-sm w-fit rounded-xl rounded-tl-none px-3 py-2 whitespace-pre-wrap bg-neutral-100 dark:bg-neutral-800 '>
+                        {welcomeMessage}
+                    </div>
+                </div>
+                {chatMessages && chatMessages.length > 0 ? (
+                    chatMessages.map((message) => (
+                        <div key={message._id}>
+                            <div
+                                className={
+                                    'text-neutral-400 text-sm ' +
+                                    (message.isHuman && !expanded
+                                        ? 'text-right'
+                                        : '')
+                                }
+                            >
+                                {message.isHuman ? <>You</> : <>{name}</>}
+                            </div>
+                            {message.text === '' ? (
+                                <div className='animate-pulse rounded-md bg-black/10 h-5' />
+                            ) : (
+                                <div
+                                    className={`w-full flex ${message.isHuman && !expanded ? 'justify-end' : 'justify-start'}`}
+                                >
+                                    <div
+                                        className={
+                                            'text-sm w-fit rounded-xl px-3 py-2 whitespace-pre-wrap ' +
+                                            (message.isHuman
+                                                ? 'bg-neutral-200 dark:bg-neutral-800 '
+                                                : 'bg-neutral-100 dark:bg-neutral-900 ') +
+                                            (message.isHuman && !expanded
+                                                ? 'rounded-tr-none'
+                                                : 'rounded-tl-none')
+                                        }
+                                    >
+                                        {message.text}
+                                    </div>
+                                </div>
+                            )}
+                        </div>
+                    ))
+                ) : (
+                    // <div>
+                    //     <p className='text-sm text-neutral-400'>{name}</p>
+                    //     <div className='text-sm w-full rounded-xl rounded-tl-none px-3 py-2 whitespace-pre-wrap bg-neutral-200 dark:bg-neutral-800 '>
+                    //         {welcomeMessage}
+                    //     </div>
+                    // </div>
+                    <></>
+                )}
+
+                {/* {aiResponse === '' ? (
                     <div>
                         <p className='text-sm text-neutral-400'>{name}</p>
                         <div className='text-sm w-full rounded-xl rounded-tl-none px-3 py-2 whitespace-pre-wrap bg-neutral-200 dark:bg-neutral-800 '>
@@ -256,7 +333,7 @@ export function Dialog({
                             {aiResponse}
                         </div>
                     </div>
-                )}
+                )} */}
                 {/* {remoteMessages === undefined ? (
                     <>
                         <div className='animate-pulse rounded-md bg-black/10 h-5' />
